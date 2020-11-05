@@ -6,24 +6,49 @@ Users may create an account to track their collection and decks of Magic the Gat
 
 ## Features
 ### MVP
-#### User Account Features 
-- A User may create an account if they have not already.
-- A user may log into their account if they have created one.
-- A User may delete their account.
-- A User may modify their account information.
+- User account features
+  - A user may create an account if they have not already.
+  - A user may log into their account if they have created one.
+  - A user may delete their account.
+  - A user may modify their account information: username, password, etc.
+  
+- User card collection features
+  - A user may maintain a collection of cards they own and a collection of cards in their wishlist
+  - A user may maintain a set of decks made up of cards they own
+  - A user may move a card between owned cards, their wishlist or a deck
+  - A user may remove a card from their collection
+  - A user may remove a deck from their collection
+  
+- Card search page features
+  - A user may search or browse for a card multiple attributes including:
+    - Name
+    - Set
+    - Color(s)
+    - Card type
+  - A user may add a card to their collection or to their wishlist from search page
+  - A user may add a card to a deck they have already created from the search page
+  - A user may add multiple copies of a card to their collection, wishlist or a deck from the search page
+  - A user may click on a card from search results and go to a show page for that card
+  
+- Card show page features
+  - This page shows information available about a card including:
+    - Artwork
+    - Text and data printed on the card
+    - Rulings and clarifications provided
+  - If there are multiple printings of a card from different set they are accessible from this page
+  - A user may add or remove a card from a list or deck from here
 
-#### Search Features
-- A user may search for a card by 
-  - jjj
-
+- Deck page features
+  - A user may create a new, empty deck and define some information about it. Name, description, play format
+  - A user may remove a deck from their collection from this page
 
 ### Stretch
-
+- Display an active deck or list alongside search results and update in real time when a card is added
 
 
 
 ### Gold
-- Price data from tcgplayer.com (requires approval for API key)
+- Include market price data from tcgplayer.com, this may be displayed on search, card show, and deck show pages. (requires approval for API key)
 
 
 
@@ -31,9 +56,14 @@ Users may create an account to track their collection and decks of Magic the Gat
 ## ERD
 
 ## Wireframes
+### Account page
 
+### Card search page
 
-## User Stories
+### Individual show page
+
+### Deck show page
+
 
 
 ## Technology
