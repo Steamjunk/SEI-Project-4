@@ -82,15 +82,19 @@ Users may create an account to build and track a collection of Commander decks o
 
 ## Wireframes
 ### User Account Page
+![](/planning/Account-Page.png)
 
 ### User Decks Page
+![](/planning/Decks-Page.png)
 
 ### Card Search Page
 ![](/planning/Card-Search-Page.png)
 
 ### Individual Card Show Page
+![](/planning/Card-Show-Page.png)
 
 ### Deck Show Page
+![](/planning/Deck-Show-Page.png)
 
 
 
