@@ -109,3 +109,5 @@ Users may create an account to build and track a collection of Commander decks o
 - [MTG Card API](https://docs.magicthegathering.io/)
 - [Card API JavaScript SDK](https://github.com/MagicTheGathering/mtg-sdk-javascript)
 - [React/Express App Tutorial](https://www.freecodecamp.org/news/create-a-react-frontend-a-node-express-backend-and-connect-them-together-c5798926047c/)
+- [chartjs Data Visualization](https://www.chartjs.org/)
+- [D3 Data Visualization Examples](https://d3meetup.surge.sh/pages/meetup.html)
