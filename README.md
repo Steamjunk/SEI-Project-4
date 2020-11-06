@@ -78,6 +78,7 @@ Users may create an account to build and track a collection of Commander decks o
 
 
 ## ERD
+![](/planning/Project-4-ERD.png)
 
 ## Wireframes
 ### Account page
