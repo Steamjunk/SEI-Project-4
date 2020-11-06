@@ -81,15 +81,16 @@ Users may create an account to build and track a collection of Commander decks o
 ![](/planning/Project-4-ERD.png)
 
 ## Wireframes
-### Account page
+### User Account Page
 
-### Collection page
+### User Decks Page
 
-### Card search page
+### Card Search Page
+![](/planning/Card-Search-Page.png)
 
-### Individual show page
+### Individual Card Show Page
 
-### Deck show page
+### Deck Show Page
 
 
 
