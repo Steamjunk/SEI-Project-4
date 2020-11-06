@@ -37,35 +37,36 @@ Users may create an account to build and track a collection of Commander decks o
 - Deck page features
   - A user may remove a deck from their collection from this page
   - A user may modify deck information (Name, description) on this page
-  - A user may select a Legendary creature to be the Commander for a deck if that is the chosen deck format.
+  - A user may select a Legendary creature to be the Commander of a deck.
   - A user may draw a sample hand of 7 cards from this deck.
   - A user may draw additional cards to simulate the first turns of a game
   - A list of cards in the deck is displayed.
   - Use a data visualization tool to plot deck analysis:
     - Display mana curve (bar chart would be effective)
     - Display makeup of card types (pie chart would be effective)
-  - Display whether a deck is legal or not for a the format. Some cards are banned
 
 
 ### Stretch
-- A user may select a deck or list to display alongside search results and update in real time when a card is added
-- A user may select a legendary creature from the search page and create a new empty deck with it as Commander
-- Add animations for when a card is selected or moved
-- Limit the cards a user may add to the deck based on Commander format rules
-  - A deck may only have one of each card except for basic lands (there are a few exceptions)
-  - A deck may only contain cards matching its Commander's color identity
+- Card search page stretch features
+  - A user may select a deck to display alongside search results and update in real time when a card is added
+  - A user may select a legendary creature from the search page and create a new empty deck with it as Commander
+  - Add animations for when a card is selected or moved
+  - Limit the cards a user may add to the deck based on Commander format rules
+    - A deck may only have one of each card except for basic lands (there are a few exceptions)
+    - A deck may only contain cards matching its Commander's color identity
 
-- Card page stretch features
+- Card show page stretch features
   - If a card is in one or more decks, those decks are listed from the card's show page
   - If there are multiple printings of a card from different sets they are accessible from this page.
   - A card from a particular set may be added to a deck. Cards may be reprinted with different art or text depending on set, but functionally they are the same.
 
-- Deck page stretch features
+- Deck show page stretch features
   - Animate the drawing of a sample hand for a deck
   - A user may sort or filter listed cards by:
     - Name
     - Converted Mana Cost
     - Card type
+  - Display whether a deck is legal or not for a the format. Some cards are banned
 
 
 ### Gold
