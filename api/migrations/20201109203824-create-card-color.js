@@ -1,24 +1,18 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Decks', {
+    await queryInterface.createTable('CardColors', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      cardId: {
         type: Sequelize.STRING
       },
-      userId: {
+      colorId: {
         type: Sequelize.INTEGER
-      },
-      description: {
-        type: Sequelize.TEXT
-      },
-      commanderId: {
-        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -30,9 +24,16 @@ module.exports = {
         defaultValue: new Date(),
         type: Sequelize.DATE
       }
+    },
+    {
+      uniqueKeys: {
+        actions_unique: {
+          fields: ['cardId', 'colorId']
+        }
+      }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Decks');
+    await queryInterface.dropTable('CardColors');
   }
 };

@@ -1,11 +1,20 @@
 const mtg = require('mtgsdk')
 
 const Card = require('../models').Card
+const Color = require('../models').Color
+const CardColor = require('../models').CardColor
 
-
-async function searchForCard (req, res) {
+const searchForCard = async (req, res) => {
     // search in db with criteria
     // get all from cards using search criteria
+    // Card.findAll({
+    //     where: {
+    //         cmc: 3
+    //     }
+    // })
+    // .then(results => {
+    //     res.send(results)
+    // })
 
     // if found
         // display
@@ -20,6 +29,7 @@ async function searchForCard (req, res) {
 
     // add cards to db
     console.log(cards.length);
+
     let cardPromises = [];
     cards.forEach(card => {
         cardPromises.push(addCardToDatabase(card));
@@ -36,11 +46,43 @@ async function searchForCard (req, res) {
     
 }
 
-async function addCardToDatabase(card) {
+const addCardToDatabase = async (card) => {
     console.log('********************************')
-    console.log(card)
+
+    let colorPromises = []
+    card.colors.forEach(color => {
+        colorPromises.push(addCardColor(card.id, color))
+    })
+
+    Promise.all(colorPromises)
+    .then(results => {
+        console.log('---card colors added---')
+    })
+
+
     return Card.upsert(card)
 }
+
+const addCardColor = async (cardId, color) => {
+    console.log(color)
+
+    let colorPromise = Color.findOne({
+        where: {
+            color: color
+        }
+    })
+    
+    let foundColor = await colorPromise
+    console.log(foundColor.dataValues.id)
+
+    return CardColor.create({
+        cardId: cardId,
+        colorId: foundColor.dataValues.id
+    })
+
+}
+
+
 
 module.exports = {
     searchForCard

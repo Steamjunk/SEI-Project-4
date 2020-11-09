@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     userId: DataTypes.INTEGER,
     description: DataTypes.TEXT,
-    commanderId: DataTypes.INTEGER
+    commanderId: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Deck',
