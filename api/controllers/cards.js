@@ -3,7 +3,14 @@ const mtg = require('mtgsdk')
 const Card = require('../models').Card
 const Color = require('../models').Color
 const Ruling = require('../models').Ruling
+const Supertype = require('../models').Supertype
+const Type = require('../models').Type
+const Subtype = require('../models').Subtype
+
 const CardColor = require('../models').CardColor
+const CardSupertype = require('../models').CardSupertype
+const CardType = require('../models').CardType
+const CardSubtype = require('../models').CardSubtype
 
 const searchForCard = async (req, res) => {
     // search in db with criteria
@@ -56,18 +63,26 @@ const addCardToDatabase = async (card) => {
     
     // add supertypes
     let superTypePromises = []
+    card.supertypes.forEach(supertype => {
+        superTypePromises.push(addCardSupertype(card.id, supertype))
+    })
     
     // add types
     let typePromises = []
+    card.types.forEach(type => {
+        typePromises.push(addCardType(card.id, type))
+    })
     
     // add subtypes
-    let subTypePromises = []
+    let subtypePromises = []
+    card.subtypes.forEach(subtype => {
+        subtypePromises.push(addCardSubtype(card.id, subtype))
+    })
     
     // add rulings
     let rulingPromises = []
     card.rulings.forEach(ruling => {
-        ruling.cardId = card.id
-        rulingPromises.push(addCardRuling(ruling))
+        rulingPromises.push(addCardRuling(card.id, ruling))
     })
     
     // add legalities
@@ -95,14 +110,36 @@ const addCardColor = async (cardId, color) => {
     })
 }
 
-const addCardRuling = async (ruling) => {
+const addCardSupertype = async (cardId, supertype) => {
+    let supertypePromise = Supertype.upsert({
+        supertype: supertype
+    })
+    let result = await supertypePromise
+
+    console.log(result) // todo start here. get supertype id from result and add below. Then repeat for type and subtype
+
+    return CardSupertype.create({
+        cardId: cardId,
+        super
+    })
+
+}
+
+const addCardType = async (cardId, type) => {
+
+}
+
+const addCardSubtype = async (cardId, subtype) => {
+
+}
+
+const addCardRuling = async (cardId, ruling) => {
     return Ruling.create({
-        cardId: ruling.cardId,
+        cardId: cardId,
         date: ruling.date,
         text: ruling.text
     })
 }
-
 
 
 module.exports = {
