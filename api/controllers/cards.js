@@ -7,7 +7,7 @@ const Supertype = require('../models').Supertype
 const Type = require('../models').Type
 const Subtype = require('../models').Subtype
 
-const CardColor = require('../models').CardColor
+const CardColor = require('../moqqdels').CardColor
 const CardSupertype = require('../models').CardSupertype
 const CardType = require('../models').CardType
 const CardSubtype = require('../models').CardSubtype
@@ -29,7 +29,7 @@ const searchForCard = async (req, res) => {
 
 
 
-    // todo use try catch block?
+    // todo use try catch block? Start here. error catch everything to debug type exception errors
     // else search api
     let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
     
@@ -90,6 +90,9 @@ const addCardToDatabase = async (card) => {
     
     // wait for all promises to return
     Promise.all(colorPromises)
+    Promise.all(superTypePromises)
+    Promise.all(typePromises)
+    Promise.all(subtypePromises)
     Promise.all(rulingPromises)
 
     
@@ -114,23 +117,36 @@ const addCardSupertype = async (cardId, supertype) => {
     let supertypePromise = Supertype.upsert({
         supertype: supertype
     })
-    let result = await supertypePromise
-
-    console.log(result) // todo start here. get supertype id from result and add below. Then repeat for type and subtype
+    let returnedSupertype = await supertypePromise
 
     return CardSupertype.create({
         cardId: cardId,
-        super
+        supertypeId: returnedSupertype.dataValues.id
     })
-
 }
 
 const addCardType = async (cardId, type) => {
+    let typePromise = Type.upsert({
+        type: type
+    })
+    let returnedType = await typePromise
 
+    return CardType.create({
+        cardId: cardId,
+        typeId: returnedType.dataValues.id
+    })
 }
 
 const addCardSubtype = async (cardId, subtype) => {
+    let subtypePromise = Subtype.upsert({
+        subtype: subtype
+    })
+    let returnedSubtype = await subtypePromise
 
+    return CardSubtype.create({
+        cardId: cardId,
+        subtypeId: returnedSubtype.dataValues.id
+    })
 }
 
 const addCardRuling = async (cardId, ruling) => {
