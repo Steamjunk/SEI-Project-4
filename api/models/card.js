@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   Card.init({
-    multiverseId: DataTypes.INTEGER,
+    multiverseId: DataTypes.STRING,
     name: DataTypes.STRING,
     manaCost: DataTypes.STRING,
     cmc: DataTypes.INTEGER,

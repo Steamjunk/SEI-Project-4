@@ -4,13 +4,11 @@ module.exports = {
     await queryInterface.createTable('Cards', {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING,
       },
       multiverseId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        type: Sequelize.STRING,
         unique: true
       },
       name: {

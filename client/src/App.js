@@ -24,7 +24,9 @@ class App extends Component {
             Edit <code>src/App.js</code> and save to reload.
           </p>
         </header>
-        <p className="App-intro">API data: {this.state.apiResponse}</p>
+        <p className="App-intro">
+          {this.state.apiResponse ? `API data: ${this.state.apiResponse}` : "waiting for API..."}
+          </p>
 
       </div>
     );
