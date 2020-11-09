@@ -3,9 +3,7 @@ var router = express.Router();
 const ctrl = require('../controllers');
 
 
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.get('/', ctrl.cards.searchForCard);
 
 
 module.exports = router;
