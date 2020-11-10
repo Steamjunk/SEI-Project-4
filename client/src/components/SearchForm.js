@@ -29,7 +29,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="white">White</label>
+                <label htmlFor="white">White</label>
                 <input
                     type="checkbox"
                     id="blue"
@@ -37,7 +37,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="blue">Blue</label>
+                <label htmlFor="blue">Blue</label>
                 <input
                     type="checkbox"
                     id="black"
@@ -45,7 +45,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="black">Black</label>
+                <label htmlFor="black">Black</label>
                 <input
                     type="checkbox"
                     id="red"
@@ -53,7 +53,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="red">Red</label>
+                <label htmlFor="red">Red</label>
                 <input
                     type="checkbox"
                     id="green"
@@ -61,7 +61,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="green">Green</label>
+                <label htmlFor="green">Green</label>
                 <input
                     type="checkbox"
                     id="colorless"
@@ -69,7 +69,7 @@ const SearchForm = (props) => {
                     value="True"
                     onChange={props.handleInputChange}
                 />
-                <label for="colorless">Colorless</label>
+                <label htmlFor="colorless">Colorless</label>
             </div>
             <select
                 name='supertype'

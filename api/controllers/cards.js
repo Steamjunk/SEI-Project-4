@@ -13,6 +13,8 @@ const CardType = require('../models').CardType
 const CardSubtype = require('../models').CardSubtype
 
 const searchForCard = async (req, res) => {
+
+    console.log(req.params)
     // search in db with criteria
     // get all from cards using search criteria
     Card.findAll({
