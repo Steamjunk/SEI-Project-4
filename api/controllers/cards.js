@@ -15,21 +15,38 @@ const CardSubtype = require('../models').CardSubtype
 const searchForCard = async (req, res) => {
     // search in db with criteria
     // get all from cards using search criteria
-    // Card.findAll({
-    //     where: {
-    //         cmc: 3
-    //     }
-    // })
-    // .then(results => {
-    //     res.send(results)
-    // })
+    Card.findAll({
+        where: {
+            cmc: 3
+        },
+        include: [{
+            model: Color
+        },
+        {
+            model: Supertype
+        },
+        {
+            model: Type
+        },
+        {
+            model: Subtype
+        }
+        // will fail if no card rulings
+    ]
+    })
+    .then(results => {
+        console.log(results)
+        res.send(results)
+    })
+    .catch(err => {
+        console.error(err)
+    })
 
     // if found
         // display
 
 
 
-    // todo use try catch block? Start here. error catch everything to debug type exception errors
     // else search api
     try {
         let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
@@ -95,10 +112,15 @@ const addCardToDatabase = async (card) => {
     
     // wait for all promises to return
     Promise.all(colorPromises)
+    .catch(err => console.error(err.name))
     Promise.all(superTypePromises)
+    .catch(err => console.error(err.name))
     Promise.all(typePromises)
+    .catch(err => console.error(err.name))
     Promise.all(subtypePromises)
+    .catch(err => console.error(err.name))
     Promise.all(rulingPromises)
+    .catch(err => console.error(err))
 
     
     return Card.upsert(card)
@@ -120,7 +142,6 @@ const addCardColor = async (cardId, color) => {
     } catch (err) {
         console.error(err.name)
     }
-
 }
 
 const addCardSupertype = async (cardId, supertype) => {
@@ -144,6 +165,7 @@ const addCardSupertype = async (cardId, supertype) => {
             supertypeId: supertype.dataValues.id
         })
     })
+    .catch(err => console.error(err.name))
 }
 
 const addCardType = async (cardId, type) => {
@@ -167,6 +189,7 @@ const addCardType = async (cardId, type) => {
             typeId: type.dataValues.id
         })
     })
+    .catch(err => console.error(err.name))
 }
 
 const addCardSubtype = async (cardId, subtype) => {
@@ -190,6 +213,7 @@ const addCardSubtype = async (cardId, subtype) => {
             subtypeId: subtype.dataValues.id
         })
     })
+    .catch(err => console.error(err.name))
 }
 
 const addCardRuling = async (cardId, ruling) => {
