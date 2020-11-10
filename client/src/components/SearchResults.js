@@ -9,12 +9,7 @@ const SearchResults = (props) => {
         fetch(buildUrl())
             .then(res => res.json())
             .then(res => {
-                console.log(res[0])
-                const cardList = []
-                res.forEach(card => {
-                    cardList.push(card)
-                });
-                setSearchResults(cardList)
+                setSearchResults(res)
             });
     }
 
