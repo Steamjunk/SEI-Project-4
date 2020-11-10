@@ -2,14 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 
 const SearchResults = (props) => {
-    const [apiResponse, setApiResponse] = useState({
-        apiResponse: ''
-    })
+    const [apiResponse, setApiResponse] = useState(null)
 
-    useEffect(() => {
-        console.log(props)
-        callAPI(props.searchParameters);
-    })
+    
+
 
 
     const callAPI = () => {
@@ -17,7 +13,7 @@ const SearchResults = (props) => {
         console.log(searchUrl)
         fetch(searchUrl)
             .then(res => res.text())
-            .then(res => setApiResponse({ apiResponse: res }));
+            .then(res => setApiResponse(res));
     }
 
     const buildUrl = () => {
@@ -84,11 +80,18 @@ const SearchResults = (props) => {
         return searchUrl
     }
 
+    useEffect(() => {
+        console.log(props)
+        callAPI();
+    }, [props.searchParameters]);
+
 
     return (
         <div>
+            <h2>Search Results</h2>
+            <p>Found {} cards</p>
             <p>
-                {apiResponse.apiResponse ? apiResponse.apiResponse : "waiting for API..."}
+                {apiResponse ? apiResponse : "waiting for API..."}
             </p>
         </div>
     )

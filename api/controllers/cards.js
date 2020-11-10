@@ -19,10 +19,10 @@ const searchForCard = async (req, res) => {
     // get all from cards using search criteria
     Card.findAll({
         where: {
-            cmc: 3
+            // cmc: 3
         },
         include: [{
-            model: Color
+            model: Color,
         },
         {
             model: Supertype
@@ -37,7 +37,7 @@ const searchForCard = async (req, res) => {
     ]
     })
     .then(results => {
-        console.log(results)
+        console.log(results.length)
         res.send(results)
     })
     .catch(err => {
@@ -50,32 +50,32 @@ const searchForCard = async (req, res) => {
 
 
     // else search api
-    try {
-        let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
+    // try {
+    //     let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
         
-        let cards = await searchPromise;
+    //     let cards = await searchPromise;
     
-        // add cards to db
-        console.log(cards.length);
+    //     // add cards to db
+    //     console.log(cards.length);
     
-        let cardPromises = [];
-        cards.forEach(card => {
-            cardPromises.push(addCardToDatabase(card));
-        })
+    //     let cardPromises = [];
+    //     cards.forEach(card => {
+    //         cardPromises.push(addCardToDatabase(card));
+    //     })
         
-        Promise.all(cardPromises)
-        .then(results => {
-            console.log('---cards added---')
-            res.send(results);
-        })
-        .catch(err => console.error(err))
+    //     Promise.all(cardPromises)
+    //     .then(results => {
+    //         console.log('---cards added---')
+    //         res.send(results);
+    //     })
+    //     .catch(err => console.error(err))
         
-        // display from db
-        // send complete set of cards
+    //     // display from db
+    //     // send complete set of cards
         
-    } catch (err) {
-        console.error(err.name)
-    }
+    // } catch (err) {
+    //     console.error(err.name)
+    // }
 }
 
 const addCardToDatabase = async (card) => {

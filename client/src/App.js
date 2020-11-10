@@ -17,11 +17,13 @@ const App = () => {
     supertype: '',
     type: '',
     subtype: ''
-
   })
 
   const handleInputChange = (e) => {
-    searchParameters[e.target.name] = e.target.value
+    setSearchParameters((prevState) => ({
+      ...prevState,
+      [e.target.name]: e.target.value
+    }));
   }
 
   return (
