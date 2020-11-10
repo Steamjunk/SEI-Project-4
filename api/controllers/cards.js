@@ -49,7 +49,7 @@ const searchForCard = async (req, res) => {
 
 
 
-    // else search api
+    // // else search api
     // try {
     //     let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
         

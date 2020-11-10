@@ -2,22 +2,24 @@ import React, { useState, useEffect } from 'react';
 
 
 const SearchResults = (props) => {
-    const [apiResponse, setApiResponse] = useState(null)
-
-    
-
-
+    const [searchResults, setSearchResults] = useState(null)
 
     const callAPI = () => {
         const searchUrl = buildUrl()
         console.log(searchUrl)
         fetch(searchUrl)
-            .then(res => res.text())
-            .then(res => setApiResponse(res));
+            .then(res => res.json())
+            .then(res => {
+                console.log(res[0])
+                const cardList = []
+                res.forEach(card => {
+                    cardList.push(card)
+                });
+                setSearchResults(cardList)
+            });
     }
 
     const buildUrl = () => {
-        console.log(props.searchParameters)
         let searchUrl = 'http://localhost:9000/cards/'
 
         if (props.searchParameters.name) {
@@ -76,23 +78,30 @@ const SearchResults = (props) => {
             searchUrl = searchUrl + `null/`
         }
 
-
         return searchUrl
     }
 
     useEffect(() => {
-        console.log(props)
         callAPI();
     }, [props.searchParameters]);
 
 
     return (
         <div>
-            <h2>Search Results</h2>
-            <p>Found {} cards</p>
-            <p>
-                {apiResponse ? apiResponse : "waiting for API..."}
-            </p>
+            {searchResults 
+            ?  
+                <div>
+                    <h2>Search Results</h2>
+                    <p>Found {searchResults.length} cards</p>
+                    <ul>
+                        {searchResults.map((card) => {
+                            return <p>{card.name}</p>
+                        })}
+                    </ul>
+
+                </div>
+            
+            : "waiting for API..."}
         </div>
     )
 }
