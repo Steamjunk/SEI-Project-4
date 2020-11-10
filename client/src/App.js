@@ -1,33 +1,44 @@
 import React, { Component } from 'react'
+import Header from './components/Header'
+import SearchForm from './components/SearchForm'
+import SearchResults from './components/SearchResults'
+
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { apiResponse: "" };
+    this.state = {
+      searchParameters: {
+        name: '',
+        set: '',
+        white: 'False',
+        blue: 'False',
+        black: 'False',
+        green: 'False',
+        red: 'False',
+        colorless: 'False',
+        supertype: '',
+        type: '',
+        subtype: ''
+      }
+    };
   }
 
-  callAPI() {
-      fetch("http://localhost:9000/cards")
-          .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }));
-  }
-
-  componentDidMount() {
-      this.callAPI();
+  handleInputChange = (e) => {
+    this.state.searchParameters[e.target.name] = e.target.value
   }
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-        </header>
-        <p className="App-intro">
-          {this.state.apiResponse ? `API data: ${this.state.apiResponse}` : "waiting for API..."}
-          </p>
-
+        <Header />
+        <SearchForm
+          searchParameters={this.state.searchParameters}
+          handleInputChange={this.handleInputChange}
+        />
+        <SearchResults
+          searchParameters={this.state.searchParameters}
+        />
       </div>
     );
   }
