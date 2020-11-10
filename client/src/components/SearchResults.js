@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
+import SearchResultCard from './SearchResultCard'
 
 const SearchResults = (props) => {
     const [searchResults, setSearchResults] = useState(null)
 
     const callAPI = () => {
-        const searchUrl = buildUrl()
-        console.log(searchUrl)
-        fetch(searchUrl)
+        fetch(buildUrl())
             .then(res => res.json())
             .then(res => {
                 console.log(res[0])
@@ -94,8 +93,8 @@ const SearchResults = (props) => {
                     <h2>Search Results</h2>
                     <p>Found {searchResults.length} cards</p>
                     <ul>
-                        {searchResults.map((card) => {
-                            return <p>{card.name}</p>
+                        {searchResults.map((card, index) => {
+                            return <SearchResultCard card={card} key={index} />
                         })}
                     </ul>
 
