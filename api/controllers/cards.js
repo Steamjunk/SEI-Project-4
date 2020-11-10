@@ -1,4 +1,6 @@
 const mtg = require('mtgsdk')
+const { Op } = require("sequelize");
+
 
 const Card = require('../models').Card
 const Color = require('../models').Color
@@ -12,67 +14,91 @@ const CardSupertype = require('../models').CardSupertype
 const CardType = require('../models').CardType
 const CardSubtype = require('../models').CardSubtype
 
+
+
+
+
 const searchForCard = async (req, res) => {
+
+    const cardWhereStatement = {};
+    if(req.params.name !== 'null') {
+        cardWhereStatement.name = {
+            [Op.iLike]: `%${req.params.name}%`
+        }
+
+        cardWhereStatement.name = req.params.name
+    }
+
 
     console.log(req.params)
     // search in db with criteria
     // get all from cards using search criteria
     Card.findAll({
+        order: [
+            ['name', 'ASC']
+        ],
         where: {
-            // cmc: 3
+            name: {
+                [Op.iLike]: `%${req.params.name}%`
+            }  
         },
-        include: [{
-            model: Color,
-        },
-        {
-            model: Supertype
-        },
-        {
-            model: Type
-        },
-        {
-            model: Subtype
-        }
-        // will fail if no card rulings
-    ]
+        include: [
+            {
+                model: Color,
+            },
+            {
+                model: Supertype
+            },
+            {
+                model: Type
+            },
+            {
+                model: Subtype,
+                // where: {
+                //     subtype: 'Warrior'
+                // }
+            }
+            // will fail if no card rulings
+        ]
+
     })
-    .then(results => {
-        console.log(results.length)
-        res.send(results)
-    })
-    .catch(err => {
-        console.error(err)
-    })
+        .then(results => {
+            console.log(results.length)
+            res.send(results)
+        })
+        .catch(err => {
+            console.error(err)
+        })
 
     // if found
-        // display
+    // display
 
 
 
     // // else search api
     // try {
     //     let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
-        
+
     //     let cards = await searchPromise;
-    
+
     //     // add cards to db
     //     console.log(cards.length);
-    
+
     //     let cardPromises = [];
     //     cards.forEach(card => {
     //         cardPromises.push(addCardToDatabase(card));
     //     })
-        
+
     //     Promise.all(cardPromises)
     //     .then(results => {
     //         console.log('---cards added---')
     //         res.send(results);
     //     })
     //     .catch(err => console.error(err))
-        
+
     //     // display from db
     //     // send complete set of cards
-        
+
     // } catch (err) {
     //     console.error(err.name)
     // }
@@ -84,47 +110,47 @@ const addCardToDatabase = async (card) => {
     card.colors.forEach(color => {
         colorPromises.push(addCardColor(card.id, color))
     })
-    
+
     // add supertypes
     let superTypePromises = []
     card.supertypes.forEach(supertype => {
         superTypePromises.push(addCardSupertype(card.id, supertype))
     })
-    
+
     // add types
     let typePromises = []
     card.types.forEach(type => {
         typePromises.push(addCardType(card.id, type))
     })
-    
+
     // add subtypes
     let subtypePromises = []
     card.subtypes.forEach(subtype => {
         subtypePromises.push(addCardSubtype(card.id, subtype))
     })
-    
+
     // add rulings
     let rulingPromises = []
     card.rulings.forEach(ruling => {
         rulingPromises.push(addCardRuling(card.id, ruling))
     })
-    
+
     // add legalities
     // let legalitiesPromises = []
-    
+
     // wait for all promises to return
     Promise.all(colorPromises)
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
     Promise.all(superTypePromises)
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
     Promise.all(typePromises)
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
     Promise.all(subtypePromises)
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
     Promise.all(rulingPromises)
-    .catch(err => console.error(err))
+        .catch(err => console.error(err))
 
-    
+
     return Card.upsert(card)
 }
 
@@ -136,7 +162,7 @@ const addCardColor = async (cardId, color) => {
             }
         })
         let foundColor = await colorPromise
-    
+
         return CardColor.create({
             cardId: cardId,
             colorId: foundColor.dataValues.id
@@ -161,13 +187,13 @@ const addCardSupertype = async (cardId, supertype) => {
             supertype: supertype
         }
     })
-    .then(supertype => {
-        return CardSupertype.create({
-            cardId: cardId,
-            supertypeId: supertype.dataValues.id
+        .then(supertype => {
+            return CardSupertype.create({
+                cardId: cardId,
+                supertypeId: supertype.dataValues.id
+            })
         })
-    })
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
 }
 
 const addCardType = async (cardId, type) => {
@@ -185,13 +211,13 @@ const addCardType = async (cardId, type) => {
             type: type
         }
     })
-    .then(type => {
-        return CardType.create({
-            cardId: cardId,
-            typeId: type.dataValues.id
+        .then(type => {
+            return CardType.create({
+                cardId: cardId,
+                typeId: type.dataValues.id
+            })
         })
-    })
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
 }
 
 const addCardSubtype = async (cardId, subtype) => {
@@ -209,13 +235,13 @@ const addCardSubtype = async (cardId, subtype) => {
             subtype: subtype
         }
     })
-    .then(subtype => {
-        return CardSubtype.create({
-            cardId: cardId,
-            subtypeId: subtype.dataValues.id
+        .then(subtype => {
+            return CardSubtype.create({
+                cardId: cardId,
+                subtypeId: subtype.dataValues.id
+            })
         })
-    })
-    .catch(err => console.error(err.name))
+        .catch(err => console.error(err.name))
 }
 
 const addCardRuling = async (cardId, ruling) => {

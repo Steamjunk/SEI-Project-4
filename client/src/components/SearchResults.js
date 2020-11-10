@@ -77,7 +77,7 @@ const SearchResults = (props) => {
 
     useEffect(() => {
         callAPI();
-    }, [props.searchParameters]);
+    }, [props.searchParameters]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
     return (
