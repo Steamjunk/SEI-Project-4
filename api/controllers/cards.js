@@ -7,7 +7,7 @@ const Supertype = require('../models').Supertype
 const Type = require('../models').Type
 const Subtype = require('../models').Subtype
 
-const CardColor = require('../moqqdels').CardColor
+const CardColor = require('../models').CardColor
 const CardSupertype = require('../models').CardSupertype
 const CardType = require('../models').CardType
 const CardSubtype = require('../models').CardSubtype
@@ -31,27 +31,32 @@ const searchForCard = async (req, res) => {
 
     // todo use try catch block? Start here. error catch everything to debug type exception errors
     // else search api
-    let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
+    try {
+        let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
+        
+        let cards = await searchPromise;
     
-    let cards = await searchPromise;
-
-    // add cards to db
-    console.log(cards.length);
-
-    let cardPromises = [];
-    cards.forEach(card => {
-        cardPromises.push(addCardToDatabase(card));
-    })
+        // add cards to db
+        console.log(cards.length);
     
-    Promise.all(cardPromises)
-    .then(results => {
-        console.log('---cards added---')
-        res.send(results);
-    })
-    
-    // display from db
-    // send complete set of cards
-    
+        let cardPromises = [];
+        cards.forEach(card => {
+            cardPromises.push(addCardToDatabase(card));
+        })
+        
+        Promise.all(cardPromises)
+        .then(results => {
+            console.log('---cards added---')
+            res.send(results);
+        })
+        .catch(err => console.error(err))
+        
+        // display from db
+        // send complete set of cards
+        
+    } catch (err) {
+        console.error(err.name)
+    }
 }
 
 const addCardToDatabase = async (card) => {
@@ -86,7 +91,7 @@ const addCardToDatabase = async (card) => {
     })
     
     // add legalities
-    let legalitiesPromises = []
+    // let legalitiesPromises = []
     
     // wait for all promises to return
     Promise.all(colorPromises)
@@ -100,52 +105,90 @@ const addCardToDatabase = async (card) => {
 }
 
 const addCardColor = async (cardId, color) => {
-    let colorPromise = Color.findOne({
-        where: {
-            color: color
-        }
-    })
-    let foundColor = await colorPromise
+    try {
+        let colorPromise = Color.findOne({
+            where: {
+                color: color
+            }
+        })
+        let foundColor = await colorPromise
+    
+        return CardColor.create({
+            cardId: cardId,
+            colorId: foundColor.dataValues.id
+        })
+    } catch (err) {
+        console.error(err.name)
+    }
 
-    return CardColor.create({
-        cardId: cardId,
-        colorId: foundColor.dataValues.id
-    })
 }
 
 const addCardSupertype = async (cardId, supertype) => {
-    let supertypePromise = Supertype.upsert({
-        supertype: supertype
-    })
-    let returnedSupertype = await supertypePromise
+    try {
+        let supertypePromise = Supertype.upsert({
+            supertype: supertype
+        })
+        await supertypePromise
+    } catch (err) {
+        console.error(err.name)
+    }
 
-    return CardSupertype.create({
-        cardId: cardId,
-        supertypeId: returnedSupertype.dataValues.id
+    Supertype.findOne({
+        where: {
+            supertype: supertype
+        }
+    })
+    .then(supertype => {
+        return CardSupertype.create({
+            cardId: cardId,
+            supertypeId: supertype.dataValues.id
+        })
     })
 }
 
 const addCardType = async (cardId, type) => {
-    let typePromise = Type.upsert({
-        type: type
-    })
-    let returnedType = await typePromise
+    try {
+        let typePromise = Type.upsert({
+            type: type
+        })
+        await typePromise
+    } catch (err) {
+        console.error(err.name)
+    }
 
-    return CardType.create({
-        cardId: cardId,
-        typeId: returnedType.dataValues.id
+    Type.findOne({
+        where: {
+            type: type
+        }
+    })
+    .then(type => {
+        return CardType.create({
+            cardId: cardId,
+            typeId: type.dataValues.id
+        })
     })
 }
 
 const addCardSubtype = async (cardId, subtype) => {
-    let subtypePromise = Subtype.upsert({
-        subtype: subtype
-    })
-    let returnedSubtype = await subtypePromise
+    try {
+        let subtypePromise = Subtype.upsert({
+            subtype: subtype
+        })
+        await subtypePromise
+    } catch (err) {
+        console.error(err.name)
+    }
 
-    return CardSubtype.create({
-        cardId: cardId,
-        subtypeId: returnedSubtype.dataValues.id
+    Subtype.findOne({
+        where: {
+            subtype: subtype
+        }
+    })
+    .then(subtype => {
+        return CardSubtype.create({
+            cardId: cardId,
+            subtypeId: subtype.dataValues.id
+        })
     })
 }
 
