@@ -93,9 +93,9 @@ const SearchResults = (props) => {
                     <h2>Search Results</h2>
                     <p>Found {searchResults.length} cards</p>
                     <ul>
-                        {searchResults.map((card, index) => {
-                            return <SearchResultCard card={card} key={index} />
-                        })}
+                        {searchResults.map((card, index) => 
+                            <SearchResultCard card={card} key={index} />
+                        )}
                     </ul>
 
                 </div>
