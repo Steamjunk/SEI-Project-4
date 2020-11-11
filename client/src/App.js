@@ -20,28 +20,21 @@ const App = () => {
   })
 
   const handleInputChange = (e) => {
-    console.log(e.target)
-    if(e.target.type === 'checkbox' &&
-       e.target.checked === true) {
-      console.log('check')
-      setSearchParameters((prevState) => ({
-        ...prevState,
-        [e.target.name]: 'True'
-      }));
-    } else 
-    if(e.target.type === 'checkbox' &&
-       e.target.checked === false) {
-      console.log('uncheck')
-      setSearchParameters((prevState) => ({
-        ...prevState,
-        [e.target.name]: 'False'
-      }));
+    let inputValue;
+    if(e.target.type === 'checkbox') {
+      if(e.target.checked === true) {
+        inputValue = 'True'
+      } else {
+        inputValue = 'False'
+      }
     } else {
-      setSearchParameters((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value
-      }));
+      inputValue = e.target.value
     }
+
+    setSearchParameters((prevState) => ({
+      ...prevState,
+      [e.target.name]: inputValue
+    }));
   }
 
   return (
