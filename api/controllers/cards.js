@@ -28,7 +28,25 @@ const searchForCard = async (req, res) => {
 
         cardWhereStatement.name = req.params.name
     }
+    // switch statement, each color
+    colorWhereStatement = []
+    if(req.params.white !== 'False') {
+        colorWhereStatement.push({ color: 'White' })
+    }
+    if(req.params.black !== 'False') {
+        colorWhereStatement.push({ color: 'Black' })
+    }
+    if(req.params.blue !== 'False') {
+        colorWhereStatement.push({ color: 'Blue' })
+    }
+    if(req.params.green !== 'False') {
+        colorWhereStatement.push({ color: 'Green' })
+    }
+    if(req.params.red !== 'False') {
+        colorWhereStatement.push({ color: 'Red' })
+    }
 
+    console.log(colorWhereStatement)
 
     console.log(req.params)
     // search in db with criteria
@@ -37,14 +55,17 @@ const searchForCard = async (req, res) => {
         order: [
             ['name', 'ASC']
         ],
-        where: {
-            name: {
-                [Op.iLike]: `%${req.params.name}%`
-            }  
-        },
+        // where: {
+        //     name: {
+        //         [Op.iLike]: `%${req.params.name}%`
+        //     }  
+        // },
         include: [
             {
                 model: Color,
+                where: {
+                    [Op.or]: colorWhereStatement
+                }
             },
             {
                 model: Supertype

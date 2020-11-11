@@ -71,6 +71,7 @@ const SearchResults = (props) => {
         } else {
             searchUrl = searchUrl + `null/`
         }
+        console.log(searchUrl)
 
         return searchUrl
     }
