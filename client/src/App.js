@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Header from './components/Header'
+import Footer from './components/Footer'
 import SearchPage from './components/SearchPage'
 import AccountPage from './components/AccountPage'
 import DeckPage from './components/DeckPage'
@@ -33,9 +34,7 @@ class App extends Component {
   }
 
   handleVerify = async () => {
-    console.log('here!')
     const currentUser = await verifyUser();
-    console.log(currentUser)
     if (currentUser) {
       this.setState({ currentUser });
     }
@@ -54,10 +53,7 @@ class App extends Component {
     return (
       <div className="App">
         <Header currentUser={this.state.currentUser} handleLogout={this.handleLogout} />
-        {this.state.currentUser ?
-          <h1>Hello, {this.state.currentUser.username}</h1>
-          :
-          <h1>Hello World</h1>}
+
         <Route exact path="/" component={SearchPage} />
         <Route path="/account" component={AccountPage} />
         <Route path="/decks" component={DeckPage} />
@@ -67,6 +63,8 @@ class App extends Component {
         <Route path="/register">
           <RegisterForm handleRegister={this.handleRegister} />
         </Route>
+
+        <Footer />
       </div>
     );
   }

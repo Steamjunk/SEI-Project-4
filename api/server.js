@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const constants = require('./constants');
+const jwt = require('jsonwebtoken');
 
 var createError = require('http-errors');
 var express = require('express');
@@ -41,6 +42,7 @@ const verifyToken = (req, res, next) => {
       if(err || !decodedUser){
           return res.status(constants.UNAUTHORIZED).send(`ERROR: ${err}`);
       }
+
       req.user = decodedUser;//set the decoded payload to req object as the user information(username, id)
 
       next();// for control to go to the next line of code
@@ -48,6 +50,7 @@ const verifyToken = (req, res, next) => {
 }
 
 // app.use('/users', routes.users)
+app.use('/auth/verify', verifyToken, routes.auth);
 app.use('/auth', routes.auth)
 app.use('/cards', routes.cards)
 // app.use('/decks', routes.decks)
