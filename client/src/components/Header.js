@@ -1,39 +1,40 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
+import * as H from "../styles/HeaderStyle";
 
 const Header = (props) => {
     return (
-        <header className="App-header">
+        <H.StyledHeader>
             <Link to='/'>
                 <h1>The Command Tower</h1>
             </Link>
             {props.currentUser ?
-                <nav>
-                    <li>
+                <H.StyledNav>
+                    <H.StyledNavLink>
                         <Link to='/'>Find Cards</Link>
-                    </li>
-                    <li>
+                    </H.StyledNavLink>
+                    <H.StyledNavLink>
                         <Link to='/decks'>My Decks</Link>
-                    </li>
-                    <li>
+                    </H.StyledNavLink>
+                    <H.StyledNavLink>
                         <Link to='/account'>{props.currentUser.username}'s' Account</Link>
-                    </li>
-                    <li>
+                    </H.StyledNavLink>
+                    <H.StyledNavLink>
                         <Link to='/'><button onClick={props.handleLogout}>Logout</button></Link>
-                    </li>
-                </nav>
+                    </H.StyledNavLink>
+                </H.StyledNav>
                 :
-                <nav>
-                    <li>
+                <H.StyledNav>
+                    <H.StyledNavLink>
                         <Link to='/login' >Login</Link>
-                    </li>
-                    <li>
+                    </H.StyledNavLink>
+                    <H.StyledNavLink>
                         <Link to='/register' >Register</Link>
-                    </li>
-                </nav>
+                    </H.StyledNavLink>
+                </H.StyledNav>
             }
-        </header>
+        </H.StyledHeader>
     )
 }
 

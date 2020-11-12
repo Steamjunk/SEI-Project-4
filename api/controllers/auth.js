@@ -17,8 +17,6 @@ const signup = (req, res) => {
             }
             req.body.password = hashedPwd;
 
-            console.log(req.body)
-
             User.create(req.body)
             .then(newUser => {
                 const token = jwt.sign(
@@ -85,7 +83,6 @@ const login = (req, res) => {
 }
 
 const verifyUser = (req, res) => {
-    console.log(req)
     User.findByPk(req.user.id, { // error here, user not defined
         attributes: ['id', 'username', 'updatedAt', 'email', 'name']
     })
@@ -93,7 +90,7 @@ const verifyUser = (req, res) => {
         res.status(constants.SUCCESS).json(foundUser);
     })
     .catch(err => {
-        console.log(err)
+        console.error(err)
         res.status(constants.INTERNAL_SERVER_ERROR).send(`ERROR: ${err}`);
     })
 }

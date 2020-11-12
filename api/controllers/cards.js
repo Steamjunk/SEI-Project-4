@@ -17,52 +17,34 @@ const CardSubtype = require('../models').CardSubtype
 
 const searchForCard = async (req, res) => {
 
-    let cardWhereStatement = {};
-    if(req.params.name !== 'null') {
-        cardWhereStatement.name = {
-            [Op.iLike]: `%${req.params.name}%`
-        }
+    // let cardWhereStatement = {};
+    // if (req.params.name !== 'null') {
+    //     cardWhereStatement.name = {
+    //         [Op.iLike]: `%${req.params.name}%`
+    //     }
 
-        cardWhereStatement.name = req.params.name
-    }
+    //     cardWhereStatement.name = req.params.name
+    // }
     // switch statement, each color
-    colorWhereStatement = []
-    if(req.params.white !== 'False') {
-        colorWhereStatement.push({ color: 'White' })
-    }
-    if(req.params.black !== 'False') {
-        colorWhereStatement.push({ color: 'Black' })
-    }
-    if(req.params.blue !== 'False') {
-        colorWhereStatement.push({ color: 'Blue' })
-    }
-    if(req.params.green !== 'False') {
-        colorWhereStatement.push({ color: 'Green' })
-    }
-    if(req.params.red !== 'False') {
-        colorWhereStatement.push({ color: 'Red' })
-    }
 
-    console.log(colorWhereStatement)
+    const colorWhereStatement = buildColorWhereStatement(req.params);
+    const nameWhereStatement = buildNameWhereStatement(req.params.name);
 
+    
     console.log(req.params)
+    
+    
     // search in db with criteria
     // get all from cards using search criteria
     Card.findAll({
         order: [
             ['name', 'ASC']
         ],
-        where: {
-            name: {
-                [Op.iLike]: `%${req.params.name}%` // doesnt search with name, make colors conditional?
-            }  
-        },
+        where: nameWhereStatement,
         include: [
             {
                 model: Color,
-                where: {
-                    [Op.or]: colorWhereStatement
-                }
+                where: colorWhereStatement
             },
             {
                 model: Supertype
@@ -270,6 +252,54 @@ const addCardRuling = async (cardId, ruling) => {
     })
 }
 
+const buildColorWhereStatement = (params) => {
+    colorWhereList = []
+    if (params.white !== 'False') {
+        colorWhereList.push({ color: 'White' })
+    }
+    if (params.black !== 'False') {
+        colorWhereList.push({ color: 'Black' })
+    }
+    if (params.blue !== 'False') {
+        colorWhereList.push({ color: 'Blue' })
+    }
+    if (params.green !== 'False') {
+        colorWhereList.push({ color: 'Green' })
+    }
+    if (params.red !== 'False') {
+        colorWhereList.push({ color: 'Red' })
+    }
+
+    console.log(colorWhereList)
+    let colorWhereStatement = {};
+    if(colorWhereList.length > 0) {
+        colorWhereStatement = {
+            [Op.or]: colorWhereList
+        }
+    }
+
+    return colorWhereStatement
+}
+
+const buildNameWhereStatement = (name) => {
+    let nameWhereStatement = {}
+    if (name !== 'null') {
+        nameWhereStatement = {
+            name: {
+                [Op.iLike]: `%${name}%` // doesnt search with name, make colors conditional?
+            }
+        }
+    } else {
+        nameWhereStatement = {
+            name: {
+                [Op.not]: null
+            }
+        }
+    }
+    
+    console.log(nameWhereStatement);
+    return nameWhereStatement;
+}
 
 module.exports = {
     searchForCard
