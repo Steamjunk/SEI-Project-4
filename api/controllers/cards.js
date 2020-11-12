@@ -15,12 +15,9 @@ const CardType = require('../models').CardType
 const CardSubtype = require('../models').CardSubtype
 
 
-
-
-
 const searchForCard = async (req, res) => {
 
-    const cardWhereStatement = {};
+    let cardWhereStatement = {};
     if(req.params.name !== 'null') {
         cardWhereStatement.name = {
             [Op.iLike]: `%${req.params.name}%`
@@ -55,11 +52,11 @@ const searchForCard = async (req, res) => {
         order: [
             ['name', 'ASC']
         ],
-        // where: {
-        //     name: {
-        //         [Op.iLike]: `%${req.params.name}%`
-        //     }  
-        // },
+        where: {
+            name: {
+                [Op.iLike]: `%${req.params.name}%` // doesnt search with name, make colors conditional?
+            }  
+        },
         include: [
             {
                 model: Color,
