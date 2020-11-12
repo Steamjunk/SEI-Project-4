@@ -1,10 +1,13 @@
 import React, { Component } from 'react'
 import Header from './components/Header'
-import SearchForm from './components/SearchForm'
-import SearchResults from './components/SearchResults'
+import SearchPage from './components/SearchPage'
+import AccountPage from './components/AccountPage'
+import DeckPage from './components/DeckPage'
 import RegisterForm from './components/RegisterForm'
 import LoginForm from './components/LoginForm'
 import { registerUser, loginUser, verifyUser } from './services/api_helper'
+import { Redirect, Route } from 'react-router';
+
 
 
 
@@ -13,20 +16,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      currentUser: null,
-      searchParameters: {
-        name: '',
-        set: '',
-        white: 'False',
-        blue: 'False',
-        black: 'False',
-        green: 'False',
-        red: 'False',
-        colorless: 'False',
-        supertype: '',
-        type: '',
-        subtype: ''
-      }
+      currentUser: null
     }
   }
 
@@ -35,7 +25,7 @@ class App extends Component {
     const currentUser = await registerUser(registerData);
     this.setState({ currentUser })
   }
-  
+
   handleLogin = async (e, loginData) => {
     e.preventDefault();
     const currentUser = await loginUser(loginData);
@@ -51,45 +41,32 @@ class App extends Component {
     }
   }
 
-  handleInputChange = (e) => {
-    let inputValue;
-    if(e.target.type === 'checkbox') {
-      if(e.target.checked === true) {
-        inputValue = 'True'
-      } else {
-        inputValue = 'False'
-      }
-    } else {
-      inputValue = e.target.value
-    }
-    // fix set search parameters
-    // setSearchParameters((prevState) => ({
-    //   ...prevState,
-    //   [e.target.name]: inputValue
-    // }));
+  handleLogout = () => {
+    localStorage.removeItem('authToken');
+    this.setState({ currentUser: null });
   }
 
-  // componentDidMount() {
-  //   this.handleVerify();
-  // }
+  componentDidMount() {
+    this.handleVerify();
+  }
 
   render() {
     return (
       <div className="App">
-        <Header />
-        {/* {this.state.currentUser ? 
-          <h1>Hello, {this.state.currentUser.username}</h1> 
-        : 
+        <Header currentUser={this.state.currentUser} handleLogout={this.handleLogout} />
+        {this.state.currentUser ?
+          <h1>Hello, {this.state.currentUser.username}</h1>
+          :
           <h1>Hello World</h1>}
-        <RegisterForm handleRegister={this.handleRegister} />
-        <LoginForm handleLogin={this.handleLogin} /> */}
-        <SearchForm
-          searchParameters={this.state.searchParameters}
-          handleInputChange={this.handleInputChange}
-        />
-        <SearchResults
-          searchParameters={this.state.searchParameters}
-        />
+        <Route exact path="/" component={SearchPage} />
+        <Route path="/account" component={AccountPage} />
+        <Route path="/decks" component={DeckPage} />
+        <Route path="/login">
+          <LoginForm handleLogin={this.handleLogin} />
+        </Route>
+        <Route path="/register">
+          <RegisterForm handleRegister={this.handleRegister} />
+        </Route>
       </div>
     );
   }
