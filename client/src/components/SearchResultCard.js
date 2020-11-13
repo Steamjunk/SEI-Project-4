@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom';
 
 import * as S from '../styles/SearchPageStyles';
 import { Bold } from '../styles/GlobalStyle';
@@ -9,7 +10,9 @@ const SearchResultCard = (props) => {
 
     return (
         <S.ResultCard>
-            <S.ResultCardArt src={cardData.imageUrl} alt={`${cardData.name} card art`} />
+            <Link to={`/card/${cardData.id}`}>
+                <S.ResultCardArt src={cardData.imageUrl} alt={`${cardData.name} card art`} />
+            </Link>
             <S.CardInfo>
                 <h3>{cardData.name}</h3>
                 <h4>

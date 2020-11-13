@@ -1,12 +1,13 @@
-import React, { Component } from 'react'
-import Header from './components/Header'
-import Footer from './components/Footer'
-import SearchPage from './components/SearchPage'
-import AccountPage from './components/AccountPage'
-import DeckPage from './components/DeckPage'
-import RegisterForm from './components/RegisterForm'
-import LoginForm from './components/LoginForm'
-import { registerUser, loginUser, verifyUser } from './services/api_helper'
+import React, { Component } from 'react';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import SearchPage from './components/SearchPage';
+import AccountPage from './components/AccountPage';
+import CardShowPage from './components/CardShowPage';
+import DeckPage from './components/DeckPage';
+import RegisterForm from './components/RegisterForm';
+import LoginForm from './components/LoginForm';
+import { registerUser, loginUser, verifyUser } from './services/api_helper';
 import { Redirect, Route } from 'react-router';
 
 
@@ -63,6 +64,7 @@ class App extends Component {
         <Route path="/register">
           <RegisterForm handleRegister={this.handleRegister} />
         </Route>
+        <Route path="/card" component={CardShowPage} />
 
         <Footer />
       </div>

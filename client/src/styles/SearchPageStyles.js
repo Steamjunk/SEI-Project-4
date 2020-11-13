@@ -64,7 +64,7 @@ export const ResultCardArt = Styled.img`
     width: 250px;
     height: 350px;
     &:hover {
-        background-color: #fdc788;
+        opacity: 70%;
     }
 `
 
