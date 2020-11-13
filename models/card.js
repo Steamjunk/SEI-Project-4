@@ -11,40 +11,40 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Card.belongsToMany(models.Color, {
-        through: "CardColor",
-        foreignKey: "cardId",
-        otherKey: "colorId"
+        through: "card_color",
+        foreignKey: "card_id",
+        otherKey: "color_id"
       }),
       Card.belongsToMany(models.Supertype, {
-        through: "CardSupertype",
-        foreignKey: "cardId",
+        through: "card_supertype",
+        foreignKey: "card_id",
         otherKey: "supertypeId"
       }),
       Card.belongsToMany(models.Type, {
-        through: "CardType",
-        foreignKey: "cardId",
-        otherKey: "typeId"
+        through: "card_type",
+        foreignKey: "card_id",
+        otherKey: "type_id"
       }),
       Card.belongsToMany(models.Subtype, {
-        through: "CardSubtype",
-        foreignKey: "cardId",
-        otherKey: "subtypeId"
+        through: "card_subtype",
+        foreignKey: "card_id",
+        otherKey: "subtype_id"
       })
     }
   };
   Card.init({
-    multiverseId: DataTypes.STRING,
+    multiverse_id: DataTypes.STRING,
     name: DataTypes.STRING,
-    manaCost: DataTypes.STRING,
+    mana_cost: DataTypes.STRING,
     cmc: DataTypes.INTEGER,
     rarity: DataTypes.STRING,
-    setName: DataTypes.STRING,
+    set_name: DataTypes.STRING,
     text: DataTypes.TEXT,
     flavor: DataTypes.TEXT,
     artist: DataTypes.STRING,
     power: DataTypes.STRING,
     toughness: DataTypes.STRING,
-    imageUrl: DataTypes.TEXT,
+    image_url: DataTypes.TEXT,
     foil: DataTypes.BOOLEAN
   }, {
     sequelize,

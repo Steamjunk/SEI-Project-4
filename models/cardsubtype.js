@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   CardSubtype.init({
-    cardId: DataTypes.STRING,
-    subtypeId: DataTypes.INTEGER
+    card_id: DataTypes.STRING,
+    subtype_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'CardSubtype',

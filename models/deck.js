@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Deck.belongsTo(models.User, {foreignKey: 'userId'});
+      Deck.belongsTo(models.User, {foreignKey: 'user_id'});
     }
   };
   Deck.init({
     name: DataTypes.STRING,
-    userId: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER,
     description: DataTypes.TEXT,
-    commanderId: DataTypes.STRING
+    commander_id: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Deck',

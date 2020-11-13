@@ -16,23 +16,10 @@ const CardSubtype = require('../models').CardSubtype
 
 
 const searchForCard = async (req, res) => {
-
-    // let cardWhereStatement = {};
-    // if (req.params.name !== 'null') {
-    //     cardWhereStatement.name = {
-    //         [Op.iLike]: `%${req.params.name}%`
-    //     }
-
-    //     cardWhereStatement.name = req.params.name
-    // }
-    // switch statement, each color
-
     const colorWhereStatement = buildColorWhereStatement(req.params);
     const nameWhereStatement = buildNameWhereStatement(req.params.name);
 
-    
     console.log(req.params)
-    
     
     // search in db with criteria
     // get all from cards using search criteria
@@ -103,6 +90,17 @@ const searchForCard = async (req, res) => {
     //     console.error(err.name)
     // }
 }
+
+const getCardData = async (req, res) => {
+    Card.findByPk(req.params.id)
+    .then(result => {
+        res.send(result)
+    })
+    .catch(err => {
+        console.error(err)
+    })
+}
+
 
 const addCardToDatabase = async (card) => {
     // add colors
@@ -302,5 +300,6 @@ const buildNameWhereStatement = (name) => {
 }
 
 module.exports = {
-    searchForCard
+    searchForCard,
+    getCardData
 }

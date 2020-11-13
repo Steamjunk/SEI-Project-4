@@ -1,25 +1,25 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('CardSupertypes', {
+    await queryInterface.createTable('card_supertypes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      cardId: {
+      card_id: {
         type: Sequelize.STRING
       },
-      supertypeId: {
+      supertype_id: {
         type: Sequelize.INTEGER
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
@@ -28,12 +28,12 @@ module.exports = {
     {
       uniqueKeys: {
         actions_unique: {
-          fields: ['cardId', 'supertypeId']
+          fields: ['card_id', 'supertype_id']
         }
       }
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('CardSupertypes');
+    await queryInterface.dropTable('card_supertypes');
   }
 };

@@ -10,11 +10,11 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Ruling.belongsTo(models.Card, {foreignKey: 'cardId'});
+      Ruling.belongsTo(models.Card, {foreignKey: 'card_id'});
     }
   };
   Ruling.init({
-    cardId: DataTypes.STRING,
+    card_id: DataTypes.STRING,
     date: DataTypes.STRING,
     text: DataTypes.TEXT
   }, {

@@ -84,7 +84,7 @@ const login = (req, res) => {
 
 const verifyUser = (req, res) => {
     User.findByPk(req.user.id, { // error here, user not defined
-        attributes: ['id', 'username', 'updatedAt', 'email', 'name']
+        attributes: ['id', 'username', 'updated_at', 'email', 'name']
     })
     .then(foundUser => {
         res.status(constants.SUCCESS).json(foundUser);

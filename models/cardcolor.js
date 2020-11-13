@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   CardColor.init({
-    cardId: DataTypes.STRING,
-    colorId: DataTypes.INTEGER
+    card_id: DataTypes.STRING,
+    color_id: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'CardColor',

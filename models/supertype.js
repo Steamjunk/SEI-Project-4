@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Supertype.belongsToMany(models.Card, {
-        through: "CardSupertype",
-        foreignKey: "supertypeId",
-        otherKey: "cardId"
+        through: "card_supertype",
+        foreignKey: "supertype_id",
+        otherKey: "card_id"
       })
     }
   };

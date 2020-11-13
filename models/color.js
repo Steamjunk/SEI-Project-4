@@ -11,9 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Color.belongsToMany(models.Card, {
-        through: "CardColor",
-        foreignKey: "colorId",
-        otherKey: "cardId"
+        through: "card_color",
+        foreignKey: "color_id",
+        otherKey: "card_id"
       })
     }
   };

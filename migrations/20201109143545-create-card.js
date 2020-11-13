@@ -1,20 +1,20 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Cards', {
+    await queryInterface.createTable('cards', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.STRING,
       },
-      multiverseId: {
+      multiverse_id: {
         type: Sequelize.STRING,
         unique: true
       },
       name: {
         type: Sequelize.STRING
       },
-      manaCost: {
+      mana_cost: {
         type: Sequelize.STRING
       },
       cmc: {
@@ -23,7 +23,7 @@ module.exports = {
       rarity: {
         type: Sequelize.STRING
       },
-      setName: {
+      set_name: {
         type: Sequelize.STRING
       },
       text: {
@@ -41,18 +41,18 @@ module.exports = {
       toughness: {
         type: Sequelize.STRING
       },
-      imageUrl: {
+      image_url: {
         type: Sequelize.TEXT
       },
       foil: {
         type: Sequelize.BOOLEAN
       },
-      createdAt: {
+      created_at: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
       },
-      updatedAt: {
+      updated_at: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
@@ -60,6 +60,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Cards');
+    await queryInterface.dropTable('cards');
   }
 };
