@@ -2,17 +2,17 @@ const mtg = require('mtgsdk')
 const { Op } = require("sequelize");
 
 
-const card = require('../models').card
-const color = require('../models').color
-const ruling = require('../models').ruling
-const supertype = require('../models').supertype
-const type = require('../models').type
-const subtype = require('../models').subtype
+const Card = require('../models').card
+const Color = require('../models').color
+const Ruling = require('../models').ruling
+const Supertype = require('../models').supertype
+const Type = require('../models').type
+const Subtype = require('../models').subtype
 
-const card_color = require('../models').card_color
-const card_supertype = require('../models').card_supertype
-const card_type = require('../models').card_type
-const card_subtype = require('../models').card_subtype
+const CardColor = require('../models').card_color
+const CardSupertype = require('../models').card_supertype
+const CardType = require('../models').card_type
+const CardSubtype = require('../models').card_subtype
 
 
 const searchForCard = async (req, res) => {
@@ -23,27 +23,27 @@ const searchForCard = async (req, res) => {
     
     // search in db with criteria
     // get all from cards using search criteria
-    card.findAll({
+    Card.findAll({
         order: [
             ['name', 'ASC']
         ],
         where: nameWhereStatement,
         include: [
             {
-                model: color,
+                model: Color,
                 where: colorWhereStatement,
                 attributes: ['color']
             },
             {
-                model: supertype,
+                model: Supertype,
                 attributes: ['supertype']
             },
             {
-                model: type,
+                model: Type,
                 attributes: ['type']
             },
             {
-                model: subtype,
+                model: Subtype,
                 attributes: ['subtype']
                 // where: {
                 //     subtype: 'Warrior'
@@ -58,7 +58,7 @@ const searchForCard = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err)
+            console.error(err.name)
         })
 
     // if found
@@ -68,7 +68,7 @@ const searchForCard = async (req, res) => {
 
     // // else search api
     try {
-        let searchPromise = mtg.card.where({ supertypes: 'legendary', subtypes: 'goblin' });
+        let searchPromise = mtg.card.where({ subtypes: 'vampire' });
 
         let cards = await searchPromise;
 
@@ -77,8 +77,6 @@ const searchForCard = async (req, res) => {
 
         let cardPromises = [];
         cards.forEach(card => {
-            console.log('****************');
-            console.log(card);
             card.mana_cost = card.manaCost;
             card.multiverse_id = card.multiverseId;
             card.set_name = card.setName;
@@ -91,23 +89,23 @@ const searchForCard = async (req, res) => {
             console.log('---cards added---')
             res.send(results);
         })
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
 
         // display from db
         // send complete set of cards
 
     } catch (err) {
-        console.error('err')
+        console.error(err.name)
     }
 }
 
 const getCardData = async (req, res) => {
-    card.findByPk(req.params.id)
+    Card.findByPk(req.params.id)
     .then(result => {
         res.send(result)
     })
     .catch(err => {
-        console.error('err')
+        console.error(err.name)
     })
 }
 
@@ -122,7 +120,7 @@ const addCardToDatabase = async (card) => {
     // add supertypes
     let superTypePromises = []
     card.supertypes.forEach(supertype => {
-        superTypePromises.push(addcard_supertype(card.id, supertype))
+        superTypePromises.push(addCardSupertype(card.id, supertype))
     })
 
     // add types
@@ -139,8 +137,8 @@ const addCardToDatabase = async (card) => {
 
     // add rulings
     let rulingPromises = []
-    card.rulings.forEach(rulingObject => {
-        rulingPromises.push(addCardRuling(card.id, rulingObject))
+    card.rulings.forEach(ruling => {
+        rulingPromises.push(addCardRuling(card.id, ruling))
     })
 
     // add legalities
@@ -148,119 +146,118 @@ const addCardToDatabase = async (card) => {
 
     // wait for all promises to return
     Promise.all(colorPromises)
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
     Promise.all(superTypePromises)
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
     Promise.all(typePromises)
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
     Promise.all(subtypePromises)
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
     Promise.all(rulingPromises)
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
 
 
-    return card.upsert(card)
+    return Card.upsert(card)
 }
 
 const addCardColor = async (card_id, color) => {
     try {
-        let colorPromise = color.findOne({
+        let colorPromise = Color.findOne({
             where: {
                 color: color
             }
         })
         let foundColor = await colorPromise
 
-        return card_color.create({
+        return CardColor.create({
             card_id: card_id,
             color_id: foundColor.dataValues.id
         })
     } catch (err) {
-        console.error(err)
+        console.error(err.name)
     }
 }
 
-const addcard_supertype = async (card_id, supertype) => {
+const addCardSupertype = async (card_id, supertype) => {
     try {
-        let supertypePromise = supertype.upsert({
+        let supertypePromise = Supertype.upsert({
             supertype: supertype
         })
         await supertypePromise
     } catch (err) {
-        console.error('err')
+        console.error(err.name)
     }
 
-    supertype.findOne({
+    Supertype.findOne({
         where: {
             supertype: supertype
         },
         attributes: ['supertype']
     })
         .then(supertype => {
-            console.log(supertype)
-            return card_supertype.create({
+            return CardSupertype.create({
                 card_id: card_id,
-                supertypeId: supertype.dataValues.id
+                supertype_id: supertype.dataValues.id
             })
         })
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
 }
 
 const addCardType = async (card_id, type) => {
     try {
-        let typePromise = type.upsert({
+        let typePromise = Type.upsert({
             type: type
         })
         await typePromise
     } catch (err) {
-        console.error('err')
+        console.error(err.name)
     }
 
-    type.findOne({
+    Type.findOne({
         where: {
             type: type
         },
         attributes: ['type']
     })
         .then(type => {
-            return card_type.create({
+            return CardType.create({
                 card_id: card_id,
                 typeId: type.dataValues.id
             })
         })
-        .catch(err => console.error('err'))
+        .catch(err => console.error(err.name))
 }
 
 const addCardSubtype = async (card_id, subtype) => {
     try {
-        let subtypePromise = subtype.upsert({
+        let subtypePromise = Subtype.upsert({
             subtype: subtype
         })
         await subtypePromise
     } catch (err) {
-        console.error(err)
+        console.error(err.name)
     }
 
-    subtype.findOne({
+    Subtype.findOne({
         where: {
             subtype: subtype
         },
         attributes: ['subtype']
     })
         .then(subtype => {
-            return card_subtype.create({
+            return CardSubtype.create({
                 card_id: card_id,
                 subtype_id: subtype.dataValues.id
             })
         })
-        .catch(err => console.error(err))
+        .catch(err => console.error(err.name))
 }
 
-const addCardRuling = async (card_id, rulingObject) => {
-    return ruling.upsert({
+const addCardRuling = async (card_id, ruling) => {
+    return Ruling.create({
         card_id: card_id,
-        date: rulingObject.date,
-        text: rulingObject.text
+        date: ruling.date,
+        text: ruling.text
     })
 }
 

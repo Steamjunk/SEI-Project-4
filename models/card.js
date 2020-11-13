@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       card.belongsToMany(models.supertype, {
         through: "card_supertype",
         foreignKey: "card_id",
-        otherKey: "supertypeId"
+        otherKey: "supertype_id"
       }),
       card.belongsToMany(models.type, {
         through: "card_type",

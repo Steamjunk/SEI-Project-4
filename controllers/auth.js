@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const User = require('../models').User;
+const User = require('../models').user;
 const constants = require('../constants');
 
 const bcrypt = require('bcryptjs');
@@ -84,7 +84,7 @@ const login = (req, res) => {
 
 const verifyUser = (req, res) => {
     User.findByPk(req.user.id, { // error here, user not defined
-        attributes: ['id', 'username', 'updated_at', 'email', 'name']
+        attributes: ['id', 'username', 'email', 'name']
     })
     .then(foundUser => {
         res.status(constants.SUCCESS).json(foundUser);
