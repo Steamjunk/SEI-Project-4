@@ -85,20 +85,22 @@ const SearchResults = (props) => {
 
     return (
         <S.SearchResults>
-            {searchResults 
-            ?  
+            {searchResults
+                ?
                 <div>
                     <S.SearchHeader>Search Results</S.SearchHeader>
-                    <S.ResultInfo>Found {searchResults.length} cards</S.ResultInfo>
-                    <ul>
-                        {searchResults.map((card, index) => 
-                            <SearchResultCard card={card} key={index} />
-                        )}
-                    </ul>
+                    <S.ResultInfo>Found {searchResults.length} cards</S.ResultInfo> 
+                    <S.ResultsList>
+                        {searchResults.map((card, index) => {
+                            if(card.imageUrl) {
+                                return <SearchResultCard card={card} key={index} />
+                            }
+                        })}
+                    </S.ResultsList>
 
                 </div>
-            
-            : "waiting for API..."}
+
+                : "waiting for API..."}
         </S.SearchResults>
     )
 }

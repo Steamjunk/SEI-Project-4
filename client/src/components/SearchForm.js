@@ -26,7 +26,7 @@ const SearchForm = (props) => {
             </S.SearchFormContainer>
             <S.SearchFormContainer>
                 <h3>Color Identity</h3>
-                <div>
+                <S.ColorContainer>
                     <input 
                         type="checkbox"
                         id="white"
@@ -35,8 +35,8 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="white">White</label>
-                </div>
-                <div>
+                </S.ColorContainer>
+                <S.ColorContainer>
                     <input
                         type="checkbox"
                         id="blue"
@@ -45,8 +45,8 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="blue">Blue</label>
-                </div>
-                <div>
+                </S.ColorContainer>
+                <S.ColorContainer>
                     <input
                         type="checkbox"
                         id="black"
@@ -55,8 +55,8 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="black">Black</label>
-                </div>
-                <div>
+                </S.ColorContainer>
+                <S.ColorContainer>
                     <input
                         type="checkbox"
                         id="red"
@@ -65,8 +65,8 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="red">Red</label>
-                </div>
-                <div>
+                </S.ColorContainer>
+                <S.ColorContainer>
                     <input
                         type="checkbox"
                         id="green"
@@ -75,8 +75,8 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="green">Green</label>
-                </div>
-                <div>
+                </S.ColorContainer>
+                <S.ColorContainer>
                     <input
                         type="checkbox"
                         id="colorless"
@@ -85,7 +85,7 @@ const SearchForm = (props) => {
                         onChange={props.handleInputChange}
                     />
                     <label htmlFor="colorless">Colorless</label>
-                </div>
+                </S.ColorContainer>
             </S.SearchFormContainer>
             <S.SearchFormContainer>
                 <h3>Card Type</h3>

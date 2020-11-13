@@ -10,3 +10,7 @@ export const GlobalStyle = createGlobalStyle`
     color: black;
   }  
 `
+
+export const Bold = Styled.span`
+    font-weight: bold;
+`
