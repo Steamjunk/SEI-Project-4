@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import SearchResultCard from './SearchResultCard'
+import * as S from '../styles/SearchPageStyles';
+
 
 const SearchResults = (props) => {
     const [searchResults, setSearchResults] = useState(null)
@@ -82,12 +84,12 @@ const SearchResults = (props) => {
 
 
     return (
-        <div>
+        <S.SearchResults>
             {searchResults 
             ?  
                 <div>
-                    <h2>Search Results</h2>
-                    <p>Found {searchResults.length} cards</p>
+                    <S.SearchHeader>Search Results</S.SearchHeader>
+                    <S.ResultInfo>Found {searchResults.length} cards</S.ResultInfo>
                     <ul>
                         {searchResults.map((card, index) => 
                             <SearchResultCard card={card} key={index} />
@@ -97,7 +99,7 @@ const SearchResults = (props) => {
                 </div>
             
             : "waiting for API..."}
-        </div>
+        </S.SearchResults>
     )
 }
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import SearchForm from './SearchForm'
-import SearchResults from './SearchResults'
+import SearchForm from './SearchForm';
+import SearchResults from './SearchResults';
 
-
+import * as S from '../styles/SearchPageStyles';
 
 class SearchPage extends Component {
     constructor(props) {
@@ -42,7 +42,7 @@ class SearchPage extends Component {
 
     render() {
         return (
-            <div>
+            <S.SearchPage>
                 <SearchForm
                     searchParameters={this.state}
                     handleInputChange={this.handleInputChange}
@@ -50,7 +50,7 @@ class SearchPage extends Component {
                 <SearchResults
                     searchParameters={this.state}
                 />
-            </div>
+            </S.SearchPage>
         )
     }
 }
