@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class CardSupertype extends Model {
+  class card_supertype extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  CardSupertype.init({
+  card_supertype.init({
     card_id: DataTypes.STRING,
     supertype_id: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'CardSupertype',
+    modelName: 'card_supertype',
   });
-  return CardSupertype;
+  return card_supertype;
 };
