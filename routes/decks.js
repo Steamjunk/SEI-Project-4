@@ -4,6 +4,6 @@ const ctrl = require('../controllers');
 
 
 router.post('/new', ctrl.decks.newDeck);
-// router.get('/', ctrl.decks.getUserDecks);
+router.get('/', ctrl.decks.getUserDecks);
 
 module.exports = router;

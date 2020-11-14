@@ -53,7 +53,7 @@ const verifyToken = (req, res, next) => {
 app.use('/auth/verify', verifyToken, routes.auth);
 app.use('/auth', routes.auth)
 app.use('/cards', routes.cards)
-app.use('/decks', routes.decks)
+app.use('/decks', verifyToken, routes.decks)
 
 
 
