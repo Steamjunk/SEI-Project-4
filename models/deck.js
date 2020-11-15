@@ -10,7 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      deck.belongsTo(models.user, {foreignKey: 'user_id'});
+      deck.belongsTo(models.user, {foreignKey: 'user_id'}),
+      deck.belongsToMany(models.card, {
+        through: "deck_card",
+        foreignKey: "deck_id",
+        otherKey: "card_id"
+      })
     }
   };
   deck.init({

@@ -1,7 +1,8 @@
 
-const Deck = require('../models').deck;
 const constants = require('../constants');
-
+const Deck = require('../models').deck;
+const Card = require('../models').card;
+const DeckCards = require('../models').deck_cards;
 
 
 const newDeck = (req, res) => {
@@ -19,11 +20,15 @@ const newDeck = (req, res) => {
 }
 
 const getUserDecks = (req, res) => {
-    console.log('getuserdecks')
     Deck.findAll({
         where: {
             user_id: req.user.id
-        }
+        },
+        include: [
+            {
+                model: Card
+            }
+        ]
     })
     .then(decks => {
         console.log(decks);
@@ -33,8 +38,22 @@ const getUserDecks = (req, res) => {
     .catch(err => console.error(err))
 }
 
+const addCardToDeck = (req, res) => {
+    console.log('add Card')
+    DeckCards.upsert({
+        deck_id: req.body.deck_id,
+        user_id: req.body.user_id
+    })
+    .then(deckCard => {
+        res.status(constants.SUCCESS).json(deckCard);
+
+    })
+    .catch(err => console.error(err))
+}
+
 
 module.exports = {
     newDeck,
+    addCardToDeck,
     getUserDecks
 }

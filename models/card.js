@@ -29,6 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         through: "card_subtype",
         foreignKey: "card_id",
         otherKey: "subtype_id"
+      }),
+      card.belongsToMany(models.deck, {
+        through: "deck_card",
+        foreignKey: "card_id",
+        otherKey: "deck_id"
       })
     }
   };
