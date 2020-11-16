@@ -31,9 +31,25 @@ const getUserDecks = (req, res) => {
         ]
     })
     .then(decks => {
-        console.log(decks);
         res.status(constants.SUCCESS).json(decks);
+    })
+    .catch(err => console.error(err))
+}
 
+const getDeck = (req, res) => {
+    console.log(req.params.deck_id)
+    Deck.findOne({
+        where: {
+            id: req.params.deck_id
+        },
+        include: [
+            {
+                model: Card
+            }
+        ]
+    })
+    .then(deck => {
+        res.status(constants.SUCCESS).json(deck);
     })
     .catch(err => console.error(err))
 }
@@ -56,5 +72,6 @@ const addCardToDeck = (req, res) => {
 module.exports = {
     newDeck,
     addCardToDeck,
-    getUserDecks
+    getUserDecks,
+    getDeck
 }
