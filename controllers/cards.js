@@ -447,7 +447,6 @@ const sdkWhereStatement = (params) => {
     if(params.subtype !== 'Any') {
         whereStatement.subtypes = params.subtype
     }
-    console.log(whereStatement)
     return whereStatement
 }
 
