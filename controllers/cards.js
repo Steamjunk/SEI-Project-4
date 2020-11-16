@@ -19,6 +19,8 @@ const searchForCard = async (req, res) => {
     const colorWhereStatement = buildColorWhereStatement(req.params);
     const nameWhereStatement = buildNameWhereStatement(req.params.name);
 
+    const supertypeWhereStatement = buildSupertypeWhereStatement(req.params.supertype)
+
     console.log(req.params)
 
     Card.findAll({
@@ -34,6 +36,9 @@ const searchForCard = async (req, res) => {
             },
             {
                 model: Supertype,
+                // where: {
+                //     supertype: 'Snow'
+                // },
                 attributes: ['supertype']
             },
             {
@@ -48,12 +53,12 @@ const searchForCard = async (req, res) => {
         ],
         limit: 50
     })
-    .then(results => {
-        res.send(results)
-    })
-    .catch(err => {
-        console.error(err.name)
-    })
+        .then(results => {
+            res.send(results)
+        })
+        .catch(err => {
+            console.error(err.name)
+        })
 
     // if found
     // display
@@ -103,7 +108,65 @@ const getCardData = async (req, res) => {
         })
 }
 
+// get supertype
+const getSupertypes = async (req, res) => {
+    Supertype.findAll({
+        order: [
+            ['supertype', 'ASC']
+        ]
+    })
+    .then(results => {
+        res.send(results)
+    })
+    .catch(err => {
+        console.error(err.name)
+    })
+}
 
+// get type
+const getTypes = async (req, res) => {
+    Type.findAll({
+        order: [
+            ['type', 'ASC']
+        ]
+    })
+        .then(results => {
+            res.send(results)
+        })
+        .catch(err => {
+            console.error(err.name)
+        })
+}
+
+// get subtype
+const getSubtypes = async (req, res) => {
+    Subtype.findAll({
+        order: [
+            ['subtype', 'ASC']
+        ]
+    })
+        .then(results => {
+            res.send(results)
+        })
+        .catch(err => {
+            console.error(err.name)
+        })
+}
+// get setName
+// const getSupertypes = async (req, res) => {
+//     Supertype.findAll()
+//         .then(results => {
+//             res.send(results)
+//         })
+//         .catch(err => {
+//             console.error(err)
+//         })
+// }
+
+
+
+
+// Card add helpers
 const addCardToDatabase = async (card) => {
     // add colors
     let colorPromises = []
@@ -186,12 +249,12 @@ const addCardSupertype = async (card_id, supertype) => {
         where: {
             supertype: supertype
         },
-        attributes: ['supertype']
+        attributes: ['id', 'supertype']
     })
         .then(supertype => {
             return CardSupertype.create({
                 card_id: card_id,
-                supertype_id: supertype.dataValues.id
+                supertype_id: supertype.id
             })
         })
         .catch(err => console.error(err.name))
@@ -211,12 +274,12 @@ const addCardType = async (card_id, type) => {
         where: {
             type: type
         },
-        attributes: ['type']
+        attributes: ['id', 'type']
     })
         .then(type => {
             return CardType.create({
                 card_id: card_id,
-                typeId: type.dataValues.id
+                type_id: type.id
             })
         })
         .catch(err => console.error(err.name))
@@ -236,12 +299,12 @@ const addCardSubtype = async (card_id, subtype) => {
         where: {
             subtype: subtype
         },
-        attributes: ['subtype']
+        attributes: ['id', 'subtype']
     })
         .then(subtype => {
             return CardSubtype.create({
                 card_id: card_id,
-                subtype_id: subtype.dataValues.id
+                subtype_id: subtype.id
             })
         })
         .catch(err => console.error(err.name))
@@ -255,6 +318,7 @@ const addCardRuling = async (card_id, ruling) => {
     })
 }
 
+// Search helpers
 const buildColorWhereStatement = (params) => {
     colorWhereList = []
     if (params.white !== 'False') {
@@ -273,7 +337,6 @@ const buildColorWhereStatement = (params) => {
         colorWhereList.push({ color: 'Red' })
     }
 
-    console.log(colorWhereList)
     let colorWhereStatement = {};
     if (colorWhereList.length > 0) {
         colorWhereStatement = {
@@ -295,16 +358,47 @@ const buildNameWhereStatement = (name) => {
     } else {
         nameWhereStatement = {
             name: {
+                [Op.not]: ''
+            }
+        }
+    }
+    return nameWhereStatement;
+}
+
+const buildSupertypeWhereStatement = (supertype) => {
+    let supertypeWhereStatement = {}
+    if (supertype === 'Any') {
+        supertypeWhereStatement = {
+            supertype: {
                 [Op.not]: null
+            }
+        }
+    } else {
+        supertypeWhereStatement = {
+            supertype: {
+                [Op.iLike]: `${supertype}`
             }
         }
     }
 
-    console.log(nameWhereStatement);
-    return nameWhereStatement;
+    console.log('***********')
+    console.log(supertypeWhereStatement)
+
+    return supertypeWhereStatement    
+}
+
+const buildTypeWhereStatement = (type) => {
+
+}
+
+const buildSubtypeWhereStatement = (subtype) => {
+
 }
 
 module.exports = {
     searchForCard,
-    getCardData
+    getCardData,
+    getSupertypes,
+    getTypes,
+    getSubtypes
 }
