@@ -16,12 +16,7 @@ const CardSubtype = require('../models').card_subtype
 
 
 const searchForCard = async (req, res) => {
-    const colorWhereStatement = buildColorWhereStatement(req.params);
-    const nameWhereStatement = buildNameWhereStatement(req.params.name);
-
-    const supertypeWhereStatement = buildSupertypeWhereStatement(req.params.supertype)
-
-    console.log(req.params)
+    const nameWhereStatement = buildNameWhereStatement(req.params.name)
 
     Card.findAll({
         order: [
@@ -31,22 +26,26 @@ const searchForCard = async (req, res) => {
         include: [
             {
                 model: Color,
-                where: colorWhereStatement,
+                required: colorRequired(req.params),
+                where: buildColorWhereStatement(req.params),
                 attributes: ['color']
             },
             {
                 model: Supertype,
-                // where: {
-                //     supertype: 'Snow'
-                // },
+                required: typeRequired(req.params.supertype),
+                where: buildSupertypeWhereStatement(req.params.supertype),
                 attributes: ['supertype']
             },
             {
                 model: Type,
+                required: typeRequired(req.params.type),
+                where: buildTypeWhereStatement(req.params.type),
                 attributes: ['type']
             },
             {
                 model: Subtype,
+                required: typeRequired(req.params.subtype),
+                where: buildSubtypeWhereStatement(req.params.subtype),
                 attributes: ['subtype']
             }
             // will fail if no card rulings
@@ -57,17 +56,13 @@ const searchForCard = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err.name)
+            console.error(err)
         })
 
-    // if found
-    // display
 
-
-
-    // // else search api
+    // search API with name to build DB
     try {
-        let searchPromise = mtg.card.where({ name: req.params.name });
+        let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
 
         let cards = await searchPromise;
 
@@ -89,9 +84,6 @@ const searchForCard = async (req, res) => {
                 res.send(results);
             })
             .catch(err => console.error(err.name))
-
-        // display from db
-        // send complete set of cards
 
     } catch (err) {
         console.error(err.name)
@@ -115,12 +107,12 @@ const getSupertypes = async (req, res) => {
             ['supertype', 'ASC']
         ]
     })
-    .then(results => {
-        res.send(results)
-    })
-    .catch(err => {
-        console.error(err.name)
-    })
+        .then(results => {
+            res.send(results)
+        })
+        .catch(err => {
+            console.error(err.name)
+        })
 }
 
 // get type
@@ -340,7 +332,7 @@ const buildColorWhereStatement = (params) => {
     let colorWhereStatement = {};
     if (colorWhereList.length > 0) {
         colorWhereStatement = {
-            [Op.or]: colorWhereList
+            [Op.and]: colorWhereList
         }
     }
 
@@ -380,19 +372,83 @@ const buildSupertypeWhereStatement = (supertype) => {
             }
         }
     }
-
-    console.log('***********')
-    console.log(supertypeWhereStatement)
-
-    return supertypeWhereStatement    
+    return supertypeWhereStatement
 }
 
 const buildTypeWhereStatement = (type) => {
-
+    let typeWhereStatement = {}
+    if (type === 'Any') {
+        typeWhereStatement = {
+            type: {
+                [Op.not]: null
+            }
+        }
+    } else {
+        typeWhereStatement = {
+            type: {
+                [Op.iLike]: `${type}`
+            }
+        }
+    }
+    return typeWhereStatement
 }
 
 const buildSubtypeWhereStatement = (subtype) => {
+    let subtypeWhereStatement = {}
+    if (subtype === 'Any') {
+        subtypeWhereStatement = {
+            subtype: {
+                [Op.not]: null
+            }
+        }
+    } else {
+        subtypeWhereStatement = {
+            subtype: {
+                [Op.iLike]: `${subtype}`
+            }
+        }
+    }
+    return subtypeWhereStatement
+}
 
+const typeRequired = (type) => {
+    if (type === 'Any') {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+const colorRequired = (params) => {
+    if (
+        params.white !== 'False' ||
+        params.blue !== 'False' ||
+        params.black !== 'False' ||
+        params.red !== 'False' ||
+        params.green !== 'False'
+    ) {
+        return true
+    } else {
+        return false
+    }
+}
+
+const sdkWhereStatement = (params) => {
+    whereStatement = {}
+    if(params.name !== 'null') {
+        whereStatement.name = params.name
+    }
+    if(params.supertype !== 'Any') {
+        whereStatement.supertypes = params.supertype
+    }
+    if(params.type !== 'Any') {
+        whereStatement.types = params.type
+    }
+    if(params.subtype !== 'Any') {
+        whereStatement.subtypes = params.subtype
+    }
+    console.log(whereStatement)
+    return whereStatement
 }
 
 module.exports = {
