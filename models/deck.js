@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       deck.belongsTo(models.user, {foreignKey: 'user_id'}),
       deck.belongsToMany(models.card, {
-        through: "deck_card",
+        through: "deck_cards",
         foreignKey: "deck_id",
         otherKey: "card_id"
       })

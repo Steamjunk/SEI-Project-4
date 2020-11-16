@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
         otherKey: "subtype_id"
       }),
       card.belongsToMany(models.deck, {
-        through: "deck_card",
+        through: "s",
         foreignKey: "card_id",
         otherKey: "deck_id"
       })

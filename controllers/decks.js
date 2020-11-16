@@ -40,9 +40,10 @@ const getUserDecks = (req, res) => {
 
 const addCardToDeck = (req, res) => {
     console.log('add Card')
-    DeckCards.upsert({
+    console.log(req.body)
+    DeckCards.create({
         deck_id: req.body.deck_id,
-        user_id: req.body.user_id
+        card_id: req.body.card_id
     })
     .then(deckCard => {
         res.status(constants.SUCCESS).json(deckCard);
