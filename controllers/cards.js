@@ -20,9 +20,7 @@ const searchForCard = async (req, res) => {
     const nameWhereStatement = buildNameWhereStatement(req.params.name);
 
     console.log(req.params)
-    
-    // search in db with criteria
-    // get all from cards using search criteria
+
     Card.findAll({
         order: [
             ['name', 'ASC']
@@ -45,21 +43,17 @@ const searchForCard = async (req, res) => {
             {
                 model: Subtype,
                 attributes: ['subtype']
-                // where: {
-                //     subtype: 'Warrior'
-                // }
             }
             // will fail if no card rulings
-        ]
-
+        ],
+        limit: 50
     })
-        .then(results => {
-            console.log(results.length)
-            res.send(results)
-        })
-        .catch(err => {
-            console.error(err.name)
-        })
+    .then(results => {
+        res.send(results)
+    })
+    .catch(err => {
+        console.error(err.name)
+    })
 
     // if found
     // display
@@ -68,7 +62,7 @@ const searchForCard = async (req, res) => {
 
     // // else search api
     try {
-        let searchPromise = mtg.card.where({ subtypes: 'vampire' });
+        let searchPromise = mtg.card.where({ name: req.params.name });
 
         let cards = await searchPromise;
 
@@ -85,11 +79,11 @@ const searchForCard = async (req, res) => {
         })
 
         Promise.all(cardPromises)
-        .then(results => {
-            console.log('---cards added---')
-            res.send(results);
-        })
-        .catch(err => console.error(err.name))
+            .then(results => {
+                console.log('---cards added---')
+                res.send(results);
+            })
+            .catch(err => console.error(err.name))
 
         // display from db
         // send complete set of cards
@@ -101,12 +95,12 @@ const searchForCard = async (req, res) => {
 
 const getCardData = async (req, res) => {
     Card.findByPk(req.params.id)
-    .then(result => {
-        res.send(result)
-    })
-    .catch(err => {
-        console.error(err.name)
-    })
+        .then(result => {
+            res.send(result)
+        })
+        .catch(err => {
+            console.error(err.name)
+        })
 }
 
 
@@ -281,7 +275,7 @@ const buildColorWhereStatement = (params) => {
 
     console.log(colorWhereList)
     let colorWhereStatement = {};
-    if(colorWhereList.length > 0) {
+    if (colorWhereList.length > 0) {
         colorWhereStatement = {
             [Op.or]: colorWhereList
         }
@@ -305,7 +299,7 @@ const buildNameWhereStatement = (name) => {
             }
         }
     }
-    
+
     console.log(nameWhereStatement);
     return nameWhereStatement;
 }
