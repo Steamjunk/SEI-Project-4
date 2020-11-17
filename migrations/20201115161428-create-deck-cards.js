@@ -14,12 +14,12 @@ module.exports = {
       card_id: {
         type: Sequelize.STRING
       },
-      created_at: {
+      createdAt: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
       },
-      updated_at: {
+      updatedAt: {
         allowNull: false,
         defaultValue: new Date(),
         type: Sequelize.DATE
