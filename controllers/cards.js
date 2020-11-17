@@ -16,8 +16,9 @@ const CardSubtype = require('../models').card_subtype
 
 
 const searchForCard = async (req, res) => {
-    const nameWhereStatement = buildNameWhereStatement(req.params.name)
+    const nameWhereStatement = buildNameWhereStatement(req.params)
 
+    console.log(req.params)
     Card.findAll({
         order: [
             ['name', 'ASC']
@@ -55,42 +56,45 @@ const searchForCard = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err)
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
         })
 
 
     // search API with name to build DB
     try {
-        // let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
+        let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
 
-        // let cards = await searchPromise;
+        let cards = await searchPromise;
 
-        // // add cards to db
-        // console.log(cards.length);
+        // add cards to db
+        console.log(cards.length);
 
-        // let cardPromises = [];
-        // cards.forEach(card => {
-        //     card.mana_cost = card.manaCost;
-        //     card.multiverse_id = card.multiverseId;
-        //     card.set_name = card.setName;
-        //     card.image_url = card.imageUrl;
-        //     cardPromises.push(addCardToDatabase(card));
-        // })
+        let cardPromises = [];
+        cards.forEach(card => {
+            card.mana_cost = card.manaCost;
+            card.multiverse_id = card.multiverseId;
+            card.set_name = card.setName;
+            card.image_url = card.imageUrl;
+            cardPromises.push(addCardToDatabase(card));
+        })
 
-        // Promise.all(cardPromises)
-        //     .then(results => {
-        //         console.log('---cards added---')
-        //         res.send(results);
-        //     })
-        //     .catch(err => console.error(err.name))
-
-        mtg.set.all()
-            .on('data', set => {
-                console.log(set.name)
+        Promise.all(cardPromises)
+            .then(results => {
+                console.log('---cards added---')
+                console.log(results)
+                // res.send(results);
             })
-
+            .catch(err => {
+                if (err.name !== 'SequelizeUniqueConstraintError') {
+                    console.error(err)
+                }
+            })
     } catch (err) {
-        console.error(err)
+        if (err.name !== 'SequelizeUniqueConstraintError') {
+            console.error(err)
+        }
     }
 }
 
@@ -128,7 +132,9 @@ const getCardData = async (req, res) => {
             res.send(result)
         })
         .catch(err => {
-            console.error(err)
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
         })
 }
 
@@ -143,7 +149,9 @@ const getSupertypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err)
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
         })
 }
 
@@ -158,7 +166,9 @@ const getTypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err)
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
         })
 }
 
@@ -173,7 +183,9 @@ const getSubtypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err)
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
         })
 }
 // get setName
@@ -227,15 +239,35 @@ const addCardToDatabase = async (card) => {
 
     // wait for all promises to return
     Promise.all(colorPromises)
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
     Promise.all(superTypePromises)
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
     Promise.all(typePromises)
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
     Promise.all(subtypePromises)
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
     Promise.all(rulingPromises)
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
 
 
     return Card.upsert(card)
@@ -255,7 +287,9 @@ const addCardColor = async (card_id, color) => {
             color_id: foundColor.dataValues.id
         })
     } catch (err) {
-        console.error(err.name)
+        if (err.name !== 'SequelizeUniqueConstraintError') {
+            console.error(err)
+        }
     }
 }
 
@@ -266,7 +300,9 @@ const addCardSupertype = async (card_id, supertype) => {
         })
         await supertypePromise
     } catch (err) {
-        console.error(err.name)
+        if (err.name !== 'SequelizeUniqueConstraintError') {
+            console.error(err)
+        }
     }
 
     Supertype.findOne({
@@ -281,7 +317,11 @@ const addCardSupertype = async (card_id, supertype) => {
                 supertype_id: supertype.id
             })
         })
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
 }
 
 const addCardType = async (card_id, type) => {
@@ -291,7 +331,9 @@ const addCardType = async (card_id, type) => {
         })
         await typePromise
     } catch (err) {
-        console.error(err.name)
+        if (err.name !== 'SequelizeUniqueConstraintError') {
+            console.error(err)
+        }
     }
 
     Type.findOne({
@@ -306,7 +348,11 @@ const addCardType = async (card_id, type) => {
                 type_id: type.id
             })
         })
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
 }
 
 const addCardSubtype = async (card_id, subtype) => {
@@ -316,7 +362,9 @@ const addCardSubtype = async (card_id, subtype) => {
         })
         await subtypePromise
     } catch (err) {
-        console.error(err.name)
+        if (err.name !== 'SequelizeUniqueConstraintError') {
+            console.error(err)
+        }
     }
 
     Subtype.findOne({
@@ -331,7 +379,11 @@ const addCardSubtype = async (card_id, subtype) => {
                 subtype_id: subtype.id
             })
         })
-        .catch(err => console.error(err.name))
+        .catch(err => {
+            if (err.name !== 'SequelizeUniqueConstraintError') {
+                console.error(err)
+            }
+        })
 }
 
 const addCardRuling = async (card_id, ruling) => {
@@ -371,12 +423,12 @@ const buildColorWhereStatement = (params) => {
     return colorWhereStatement
 }
 
-const buildNameWhereStatement = (name) => {
+const buildNameWhereStatement = (params) => {
     let nameWhereStatement = {}
-    if (name !== 'null') {
+    if (params.name !== 'null') {
         nameWhereStatement = {
             name: {
-                [Op.iLike]: `%${name}%`
+                [Op.iLike]: `%${params.name}%`
             },
             image_url: {
                 [Op.not]: null
@@ -392,6 +444,12 @@ const buildNameWhereStatement = (name) => {
             }
         }
     }
+    if (params.set !== 'null') {
+        nameWhereStatement.set_name = params.set
+    }
+
+    console.log(nameWhereStatement)
+
     return nameWhereStatement;
 }
 
@@ -485,6 +543,9 @@ const sdkWhereStatement = (params) => {
     if (params.subtype !== 'Any') {
         whereStatement.subtypes = params.subtype
     }
+
+
+    console.log(whereStatement)
     return whereStatement
 }
 
