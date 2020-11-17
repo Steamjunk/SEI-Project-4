@@ -143,7 +143,7 @@ const getSupertypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err.name)
+            console.error(err)
         })
 }
 
@@ -158,7 +158,7 @@ const getTypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err.name)
+            console.error(err)
         })
 }
 
@@ -173,7 +173,7 @@ const getSubtypes = async (req, res) => {
             res.send(results)
         })
         .catch(err => {
-            console.error(err.name)
+            console.error(err)
         })
 }
 // get setName
