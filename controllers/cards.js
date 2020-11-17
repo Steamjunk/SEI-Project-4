@@ -48,9 +48,8 @@ const searchForCard = async (req, res) => {
                 where: buildSubtypeWhereStatement(req.params.subtype),
                 attributes: ['subtype']
             }
-            // will fail if no card rulings
         ],
-        limit: 50
+        limit: 100
     })
         .then(results => {
             res.send(results)
@@ -62,31 +61,36 @@ const searchForCard = async (req, res) => {
 
     // search API with name to build DB
     try {
-        let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
+        // let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
 
-        let cards = await searchPromise;
+        // let cards = await searchPromise;
 
-        // add cards to db
-        console.log(cards.length);
+        // // add cards to db
+        // console.log(cards.length);
 
-        let cardPromises = [];
-        cards.forEach(card => {
-            card.mana_cost = card.manaCost;
-            card.multiverse_id = card.multiverseId;
-            card.set_name = card.setName;
-            card.image_url = card.imageUrl;
-            cardPromises.push(addCardToDatabase(card));
-        })
+        // let cardPromises = [];
+        // cards.forEach(card => {
+        //     card.mana_cost = card.manaCost;
+        //     card.multiverse_id = card.multiverseId;
+        //     card.set_name = card.setName;
+        //     card.image_url = card.imageUrl;
+        //     cardPromises.push(addCardToDatabase(card));
+        // })
 
-        Promise.all(cardPromises)
-            .then(results => {
-                console.log('---cards added---')
-                res.send(results);
+        // Promise.all(cardPromises)
+        //     .then(results => {
+        //         console.log('---cards added---')
+        //         res.send(results);
+        //     })
+        //     .catch(err => console.error(err.name))
+
+        mtg.set.all()
+            .on('data', set => {
+                console.log(set.name)
             })
-            .catch(err => console.error(err.name))
 
     } catch (err) {
-        console.error(err.name)
+        console.error(err)
     }
 }
 
@@ -372,7 +376,7 @@ const buildNameWhereStatement = (name) => {
     if (name !== 'null') {
         nameWhereStatement = {
             name: {
-                [Op.iLike]: `%${name}%` // doesnt search with name, make colors conditional?
+                [Op.iLike]: `%${name}%`
             },
             image_url: {
                 [Op.not]: null
@@ -469,16 +473,16 @@ const colorRequired = (params) => {
 
 const sdkWhereStatement = (params) => {
     whereStatement = {}
-    if(params.name !== 'null') {
+    if (params.name !== 'null') {
         whereStatement.name = params.name
     }
-    if(params.supertype !== 'Any') {
+    if (params.supertype !== 'Any') {
         whereStatement.supertypes = params.supertype
     }
-    if(params.type !== 'Any') {
+    if (params.type !== 'Any') {
         whereStatement.types = params.type
     }
-    if(params.subtype !== 'Any') {
+    if (params.subtype !== 'Any') {
         whereStatement.subtypes = params.subtype
     }
     return whereStatement
