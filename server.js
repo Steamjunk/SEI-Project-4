@@ -15,7 +15,7 @@ var routes = require('./routes');
 var app = express();
 
 const corsOptions = {
-  origin: ['http://localhost:3000'],
+  origin: ['https://the-command-tower.surge.sh'],
   // origin: ['http://localhost:3000'],
   methods: "GET,POST,PUT,DELETE",
   credentials: true, //allows session cookies to be sent back and forth
