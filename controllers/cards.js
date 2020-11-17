@@ -91,12 +91,40 @@ const searchForCard = async (req, res) => {
 }
 
 const getCardData = async (req, res) => {
-    Card.findByPk(req.params.id)
+    console.log(req.params)
+    Card.findOne({
+        where: {
+            id: req.params.id
+        },
+        include: [
+            {
+                model: Color,
+                required: false,
+                attributes: ['color']
+            },
+            {
+                model: Supertype,
+                required: false,
+                attributes: ['supertype']
+            },
+            {
+                model: Type,
+                required: false,
+                attributes: ['type']
+            },
+            {
+                model: Subtype,
+                required: false,
+                attributes: ['subtype']
+            }
+        ]
+    })
         .then(result => {
+            console.log(result)
             res.send(result)
         })
         .catch(err => {
-            console.error(err.name)
+            console.error(err)
         })
 }
 
@@ -345,12 +373,18 @@ const buildNameWhereStatement = (name) => {
         nameWhereStatement = {
             name: {
                 [Op.iLike]: `%${name}%` // doesnt search with name, make colors conditional?
+            },
+            image_url: {
+                [Op.not]: null
             }
         }
     } else {
         nameWhereStatement = {
             name: {
                 [Op.not]: ''
+            },
+            image_url: {
+                [Op.not]: null
             }
         }
     }

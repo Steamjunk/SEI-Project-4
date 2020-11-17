@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const User = require('../models').user;
+const user = require('../models').user;
 const constants = require('../constants');
 
 const bcrypt = require('bcryptjs');
@@ -17,7 +17,7 @@ const signup = (req, res) => {
             }
             req.body.password = hashedPwd;
 
-            User.create(req.body)
+            user.create(req.body)
             .then(newUser => {
                 const token = jwt.sign(
                     {
@@ -44,7 +44,7 @@ const signup = (req, res) => {
 }
 
 const login = (req, res) => {
-    User.findOne({
+    user.findOne({
         where: {
             username: req.body.username
         }
@@ -83,7 +83,7 @@ const login = (req, res) => {
 }
 
 const verifyUser = (req, res) => {
-    User.findByPk(req.user.id, { // error here, user not defined
+    user.findByPk(req.user.id, { 
         attributes: ['id', 'username', 'email', 'name']
     })
     .then(foundUser => {
