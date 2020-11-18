@@ -63,39 +63,39 @@ const searchForCard = async (req, res) => {
 
 
     // search API with name to build DB
-    try {
-        let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
+    // try {
+    //     let searchPromise = mtg.card.where(sdkWhereStatement(req.params));
 
-        let cards = await searchPromise;
+    //     let cards = await searchPromise;
 
-        // add cards to db
-        console.log(cards.length);
+    //     // add cards to db
+    //     console.log(cards.length);
 
-        let cardPromises = [];
-        cards.forEach(card => {
-            card.mana_cost = card.manaCost;
-            card.multiverse_id = card.multiverseId;
-            card.set_name = card.setName;
-            card.image_url = card.imageUrl;
-            cardPromises.push(addCardToDatabase(card));
-        })
+    //     let cardPromises = [];
+    //     cards.forEach(card => {
+    //         card.mana_cost = card.manaCost;
+    //         card.multiverse_id = card.multiverseId;
+    //         card.set_name = card.setName;
+    //         card.image_url = card.imageUrl;
+    //         cardPromises.push(addCardToDatabase(card));
+    //     })
 
-        Promise.all(cardPromises)
-            .then(results => {
-                console.log('---cards added---')
-                console.log(results)
-                // res.send(results);
-            })
-            .catch(err => {
-                if (err.name !== 'SequelizeUniqueConstraintError') {
-                    console.error(err)
-                }
-            })
-    } catch (err) {
-        if (err.name !== 'SequelizeUniqueConstraintError') {
-            console.error(err)
-        }
-    }
+    //     Promise.all(cardPromises)
+    //         .then(results => {
+    //             console.log('---cards added---')
+    //             console.log(results)
+    //             // res.send(results);
+    //         })
+    //         .catch(err => {
+    //             if (err.name !== 'SequelizeUniqueConstraintError') {
+    //                 console.error(err)
+    //             }
+    //         })
+    // } catch (err) {
+    //     if (err.name !== 'SequelizeUniqueConstraintError') {
+    //         console.error(err)
+    //     }
+    // }
 }
 
 const getCardData = async (req, res) => {
